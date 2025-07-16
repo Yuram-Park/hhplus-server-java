@@ -31,6 +31,83 @@
         - 최근 3일간 가장 많이 팔린 상위 5개 상품 목록을 제공한다.
 - **비기능적** 요구사항
 
+### 시퀀스 다이어그램
+- 포인트 충전 및 조회
+```mermaid
+sequenceDiagram
+    PointController->>+PointService: 포인트 충전 요청
+    alt (amount > 0)   
+        PointService->>+PointRepository: 포인트 충전
+        PointRepository-->PointRepository: 잔액 추가 및 히스토리 적재
+        PointRepository-->>-PointService: 충전 성공 응답
+        PointService-->>PointController: 충전 성공 응답
+    else (amount <= 0)
+        PointService-->>PointController: 포인트 충전 실패
+    end
+    PointController->>+PointService: 포인트 조회 요청
+    PointService->>+PointRepository: 포인트 조회
+    PointRepository-->>-PointService: 현재 잔액 응답
+    PointService-->>+PointController: 현재 잔액 응답
+```
+![img.png](img.png)
+
+
+- 쿠폰 발급 및 조회, 사용
+```mermaid
+sequenceDiagram
+        CouponController->>CouponService: 쿠폰 발급 요청
+        CouponService->>CouponService: 쿠폰 발급 심사
+        alt 쿠폰 발급 가능
+            CouponService->>CouponRepository: 발급 쿠폰 저장 요청
+        else 쿠폰 발급 불가능
+            CouponService->>CouponController: 쿠폰 발급 불가능 응답
+        end
+        CouponController->>CouponService: 보유 쿠폰 조회 요청
+        CouponService->>CouponRepository: 보유 쿠폰 조회
+        CouponRepository-->>CouponController: 보유 쿠폰 리스트 응답
+        opt
+            CouponController->>CouponService: 쿠폰 사용 요청
+            CouponService->>CouponRepository: 사용 쿠폰 차감 요청
+            CouponRepository-->>CouponRepository: 쿠폰 차감
+            CouponRepository-->>CouponService: 사용 쿠폰 정보 응답
+        end
+```
+![img_1.png](img_1.png)
+
+
+- 상품 주문 및 결제
+```mermaid
+sequenceDiagram
+    OrderController->>OrderService: 상품 주문 요청
+    OrderService->>ProductService: 상품 재고 조회 요청
+    ProductService->>ProductService: 상품 재고 조회 요청
+    ProductService-->>OrderService: 상품 재고 확인 응답
+    alt 요청수량 <= 상품재고 : 주문 가능
+        opt 쿠폰 사용
+            OrderService->>CouponService: 쿠폰 사용 요청
+            CouponService-->>CouponService: 사용 쿠폰 삭제, 히스토리 적재
+            CouponService-->>OrderService: 사용 쿠폰 응답
+            OrderService-->>OrderService: 주문금액에 쿠폰 적용
+        end
+        OrderService-->>PointService: 주문 결제 요청
+        PointService-->>PointService: 잔액 확인
+        PointService-->>OrderService: 잔액 응답
+        alt 주문금액 <= 잔액 : 주문 가능
+                OrderService->>PointService: 포인트 사용 요청
+                PointService-->>PointService: 잔액 차감 및 히스토리 적재
+                OrderService->>ProductService: 상품 주문 요청
+                ProductService-->>ProductService: 상품 재고 차감
+                ProductService-->>OrderService: 상품 주문 완료
+                OrderService-->>OrderController: 주문 번호 반환
+            else 주문금액 > 잔액: 주문 불가능
+                ProductService-->>OrderController: 잔액 부족 에러
+            end
+    else 요청수량 > 상품재고 : 주문 불가능
+        ProductService-->>OrderController: 재고 부족 응답
+    end
+```
+![img_2.png](img_2.png)
+
 ## Getting Started
 
 ### Prerequisites
