@@ -81,32 +81,43 @@ sequenceDiagram
     OrderController->>OrderService: 상품 주문 요청
     OrderService->>ProductService: 상품 재고 조회 요청
     ProductService->>ProductService: 상품 재고 조회 요청
-    ProductService-->>OrderService: 상품 재고 확인 응답
     alt 요청수량 <= 상품재고 : 주문 가능
-        opt 쿠폰 사용
-            OrderService->>CouponService: 쿠폰 사용 요청
+        ProductService-->>OrderController: 상품 주문 가능 응답
+        opt 
+            OrderController->>CouponService: 보유 쿠폰 목록 요청
+            CouponService-->>OrderController: 보유 쿠폰 목록 응답
+            alt 쿠폰 사용
+            OrderController->>CouponService: 쿠폰 사용 요청
             CouponService-->>CouponService: 사용 쿠폰 삭제, 히스토리 적재
-            CouponService-->>OrderService: 사용 쿠폰 응답
-            OrderService-->>OrderService: 주문금액에 쿠폰 적용
+            CouponService-->>OrderController: 사용 쿠폰 응답
+            OrderController-->>OrderController: 주문금액에 쿠폰 적용
+            end
         end
-        OrderService-->>PointService: 주문 결제 요청
+        OrderController->>OrderService: 주문 결제 요청
+        OrderService->>PointService: 잔액 확인 요청
         PointService-->>PointService: 잔액 확인
         PointService-->>OrderService: 잔액 응답
         alt 주문금액 <= 잔액 : 주문 가능
+                OrderService->>ProductService: 상품 재고 차감 요청
+                ProductService-->>ProductService: 상품 재고 차감
+                ProductService-->>OrderService: 차감 완료 응답
                 OrderService->>PointService: 포인트 사용 요청
                 PointService-->>PointService: 잔액 차감 및 히스토리 적재
-                OrderService->>ProductService: 상품 주문 요청
-                ProductService-->>ProductService: 상품 재고 차감
-                ProductService-->>OrderService: 상품 주문 완료
+                PointService-->>OrderService: 재고 차감 완료 응답
                 OrderService-->>OrderController: 주문 번호 반환
             else 주문금액 > 잔액: 주문 불가능
-                ProductService-->>OrderController: 잔액 부족 에러
+                OrderService-->>OrderController: 잔액 부족 에러
             end
     else 요청수량 > 상품재고 : 주문 불가능
         ProductService-->>OrderController: 재고 부족 응답
     end
 ```
 ![img_2.png](img_2.png)
+
+
+```sql
+
+```
 
 ## Getting Started
 
