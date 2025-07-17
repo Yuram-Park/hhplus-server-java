@@ -114,9 +114,86 @@ sequenceDiagram
 ```
 ![img_2.png](img_2.png)
 
+### ERD
+
+![img_3.png](img_3.png)
 
 ```sql
+// 회원 쿠폰(User Coupon)
+CREATE TABLE user_coupon (
+coupon_id INT AUTO_INCREMENT PRIMARY KEY,
+user_id VARCHAR(10) NOT NULL,
+coupon_type CHAR(1) NOT NULL,
+is_used BOOLEAN NOT NULL DEFAULT FALSE,
+created_at TIMESTAMP NOT NULL,
+updated_at TIMESTAMP NOT NULL,
+key idx_user_id(user_id) 
+);
 
+// 쿠폰(Coupon)
+CREATE TABLE coupon (
+coupon_type CHAR(1) PRIMARY KEY,
+coupon_discount_percent TINYINT NOT NULL,
+coupon_inventory INT NOT NULL
+);
+
+// 주문(User Order)
+CREATE TABLE user_order (
+order_id INT AUTO_INCREMENT PRIMARY KEY,
+user_id VARCHAR(10) NOT NULL,
+order_quantity INT NOT NULL,
+original_payment_amount INT NOT NULL,
+coupon_id INT NULL,
+discount_payment_amount INT NOT NULL,
+final_payment_amount INT NOT NULL,
+created_at TIMESTAMP NOT NULL, // 주문 날짜로 검색한다면? date로 저장하는게 나은지..
+updated_at TIMESTAMP NOT NULL,
+key idx_user_id(user_id)
+);
+
+// 회원(User)
+CREATE TABLE user (
+user_id VARCHAR(10) PRIMARY KEY,
+user_password VARCHAR(20) NOT NULL,
+user_phone_number VARCHAR(13) NULL,
+user_address VARCHAR NULL,
+user_point INT NOT NULL DEFAULT 0,
+created_at TIMESTAMP NOT NULL,
+updated_at TIMESTAMP NOT NULL
+);
+
+// 포인트 히스토리(Point History)
+CREATE TABLE point_history (
+point_history_id INT AUTO_INCREMENT PRIMARY KEY,
+user_id VARCHAR(10) NOT NULL,
+point_history_type VARCHAR(6) NOT NULL, // 'CHARGE', 'USE'
+order_id INT NULL,
+amount INT NOT NULL,
+created_at TIMESTAMP NOT NULL,
+key idx_user_id(user_id)
+);
+
+// 주문 항목(Order Item)
+CREATE TABLE order_item (
+order_item_id INT AUTO_INCREMENT PRIMARY KEY,
+order_id INT NOT NULL,
+product_id VARCHAR(20) NOT NULL,
+order_item_quantity INT NOT NULL,
+order_item_payment INT NOT NULL,
+created_at TIMESTAMP NOT NULL,
+updated_at TIMESTAMP NOT NULL,
+key idx_order_id(order_id)
+);
+
+// 상품(Product)
+CREATE TABLE product (
+product_id VARCHAR(20) PRIMARY KEY,
+product_name VARCHAR(20) NOT NULL,
+product_description TEXT NOT NULL,
+product_inventory INT NOT NULL,
+created_at TIMESTAMP NOT NULL,
+updated_at TIMESTAMP NOT NULL
+);
 ```
 
 ## Getting Started
