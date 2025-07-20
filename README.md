@@ -192,6 +192,10 @@ updated_at TIMESTAMP NOT NULL
 );
 ```
 
+### Swgger-UI
+![img_4.png](img_4.png)
+
+
 ## Getting Started
 
 ### Prerequisites
