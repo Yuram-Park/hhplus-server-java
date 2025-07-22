@@ -1,8 +1,8 @@
-package kr.hhplus.be.server.controller;
+package kr.hhplus.be.server.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.entity.User;
+import kr.hhplus.be.server.domain.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
