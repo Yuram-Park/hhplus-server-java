@@ -11,19 +11,16 @@ public class UserOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderId;
+    private Integer orderId;
 
     @Column(nullable = false)
     private String userId;
 
     @Column(nullable = false)
-    private int orderQuantity;
-
-    @Column(nullable = false)
     private int originalPaymentAmount;
 
     @Column(nullable = true)
-    private int couponId;
+    private Integer couponId;
 
     @Column(nullable = false)
     private int discountPaymentAmount;
@@ -39,10 +36,17 @@ public class UserOrder {
 
     public UserOrder() {}
 
-    public UserOrder(int orderId, String userId, int orderQuantity, int originalPaymentAmount, int couponId, int discountPaymentAmount, int finalPaymentAmount) {
+    public UserOrder(Integer orderId, String userId, int originalPaymentAmount, Integer couponId, int discountPaymentAmount, int finalPaymentAmount) {
         this.orderId = orderId;
         this.userId = userId;
-        this.orderQuantity = orderQuantity;
+        this.originalPaymentAmount = originalPaymentAmount;
+        this.couponId = couponId;
+        this.discountPaymentAmount = discountPaymentAmount;
+        this.finalPaymentAmount = finalPaymentAmount;
+    }
+
+    public UserOrder(String userId, int originalPaymentAmount, Integer couponId, int discountPaymentAmount, int finalPaymentAmount) {
+        this.userId = userId;
         this.originalPaymentAmount = originalPaymentAmount;
         this.couponId = couponId;
         this.discountPaymentAmount = discountPaymentAmount;
@@ -65,14 +69,6 @@ public class UserOrder {
         this.userId = userId;
     }
 
-    public int getOrderQuantity() {
-        return orderQuantity;
-    }
-
-    public void setOrderQuantity(int orderQuantity) {
-        this.orderQuantity = orderQuantity;
-    }
-
     public int getOriginalPaymentAmount() {
         return originalPaymentAmount;
     }
@@ -85,7 +81,7 @@ public class UserOrder {
         return couponId;
     }
 
-    public void setCouponId(int couponId) {
+    public void setCouponId(Integer couponId) {
         this.couponId = couponId;
     }
 
@@ -120,4 +116,5 @@ public class UserOrder {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }

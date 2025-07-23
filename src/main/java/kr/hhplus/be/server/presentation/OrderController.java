@@ -39,6 +39,6 @@ public class OrderController {
     @PostMapping("/pay")
     public ResponseEntity<UserOrder>  createOrder(@RequestBody List<ProductRequestDto> productList) {
         // TODO 사용자 토큰으로 userId 추출
-        return ResponseEntity.ok(new UserOrder(1, "1", 2, 55000, 0, 0, 55000));
+        return ResponseEntity.ok(new UserOrder(1, "1", 55000, 0, 0, 55000));
     }
 }
