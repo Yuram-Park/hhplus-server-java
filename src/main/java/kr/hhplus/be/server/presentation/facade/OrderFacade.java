@@ -91,7 +91,7 @@ public class OrderFacade {
                     productService.increaseProduct(product.getProductId(), dto.getRequestQuantity());
                 }
             }
-            
+
             // 주문내역 생성 요청
             Order order = new Order(null, user.getUserId(), totalPrice, couponId, discountPaymentAmount, finalPaymentAmount, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
             Order result = orderService.createOrder(order);
