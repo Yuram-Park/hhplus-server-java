@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.unit;
+package kr.hhplus.be.server.service;
 
 import kr.hhplus.be.server.application.service.PointService;
 import kr.hhplus.be.server.datasource.UserRepositoryImpl;

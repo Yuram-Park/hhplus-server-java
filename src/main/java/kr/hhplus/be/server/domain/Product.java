@@ -2,11 +2,13 @@ package kr.hhplus.be.server.domain;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Entity
 @Table
+@AllArgsConstructor
 public class Product {
 
     @Id
