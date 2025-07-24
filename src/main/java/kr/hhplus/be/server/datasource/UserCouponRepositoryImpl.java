@@ -7,6 +7,9 @@ import kr.hhplus.be.server.domain.UserCoupon;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class UserCouponRepositoryImpl implements UserCouponRepository {
@@ -17,4 +20,16 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
     public UserCoupon createUserCoupon(UserCoupon userCoupon) {
         return userCouponJpaRepository.save(userCoupon);
     }
+
+    @Override
+    public Optional<UserCoupon> getUserCouponInfo(int couponId) {
+        return userCouponJpaRepository.findById(couponId);
+    }
+
+    @Override
+    public List<UserCoupon> getUserCouponList(String userId) {
+        return userCouponJpaRepository.findAllByUserId(userId);
+    }
+
+
 }

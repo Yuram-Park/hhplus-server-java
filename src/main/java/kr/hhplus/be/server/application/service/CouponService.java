@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +19,11 @@ public class CouponService {
 
     private final UserCouponRepositoryImpl userCouponRepository;
 
+    /**
+     * 쿠폰 발행
+     * @param userList
+     * @return
+     */
     public Map<String, UserCoupon> issueCoupon(List<User> userList) {
         // 1등 A, 2등 B, 3등 C
         char[] couponTypes = {'A', 'B', 'C'};
@@ -44,8 +46,27 @@ public class CouponService {
                 couponRepository.updateByCouponType(coupon);
             }
         }
-
         return issuedList;
     }
+
+    /**
+     * 쿠폰 정보 검색
+     * @param couponId
+     * @return
+     */
+    public UserCoupon useCoupon(int couponId) {
+        return userCouponRepository.getUserCouponInfo(couponId).orElseThrow(() -> new NoSuchElementException(couponId + " : 해당하는 쿠폰이 없습니다."));
+    }
+
+    /**
+     * 보유 쿠폰 리스트 검색
+     * @param userId
+     * @return
+     */
+    public List<UserCoupon> getCouponList(String userId) {
+        return userCouponRepository.getUserCouponList(userId);
+    }
+
+
 
 }
