@@ -48,6 +48,12 @@ public class OrderFacade {
         return results;
     }
 
+    /**
+     * 상품 결제 요청
+     * @param userId
+     * @param productList
+     * @return
+     */
     public Order requestPayment(String userId, Map<ProductRequestDto, Product> productList) {
 
         int totalPrice = 0;
@@ -69,16 +75,23 @@ public class OrderFacade {
                 productService.reduceProduct(product.getProductId(), dto.getRequestQuantity());
             }
 
-            // 쿠폰 적용 요청
-            // TODO
+            // TODO 쿠폰 적용 요청
             Integer couponId = null;
             int discountPaymentAmount = 0;
 
             int finalPaymentAmount = totalPrice - discountPaymentAmount;
 
             // 포인트 사용(결제) 요청
-            pointService.usePoint(user.getUserId(), totalPrice);
-
+            try {
+                pointService.usePoint(user.getUserId(), totalPrice);
+            } catch (Exception e) {
+                // 결제 실패 시 상품 재고 복구
+                for(ProductRequestDto dto : productList.keySet()) {
+                    Product product = productList.get(dto);
+                    productService.increaseProduct(product.getProductId(), dto.getRequestQuantity());
+                }
+            }
+            
             // 주문내역 생성 요청
             Order order = new Order(null, user.getUserId(), totalPrice, couponId, discountPaymentAmount, finalPaymentAmount, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
             Order result = orderService.createOrder(order);

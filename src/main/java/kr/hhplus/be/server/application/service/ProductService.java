@@ -51,4 +51,16 @@ public class ProductService {
         product.reduceInventory(reduceCount);
         return productRepository.updateByProductId(product);
     }
+
+    /**
+     * 상품 재고 증가
+     * @param productId
+     * @param increaseCount
+     * @return
+     */
+    public Product increaseProduct(String productId, int increaseCount) {
+        Product product = productRepository.findByProductId(productId).orElseThrow(() -> new NoSuchElementException(productId + " : 해당 상품이 존재하지 않습니다."));
+        product.increaseInventory(increaseCount);
+        return productRepository.updateByProductId(product);
+    }
 }

@@ -40,6 +40,10 @@ public class Product {
 
     // Business Logic
 
+    /**
+     * 상품 재고 차감
+     * @param reduceCount
+     */
     public void reduceInventory(int reduceCount) {
         if(reduceCount <= 0) {
             // 요청 수량은 0보다 커야합니다.
@@ -50,6 +54,19 @@ public class Product {
             throw new IllegalArgumentException("요청 수량은 재고 수량보다 많을 수 없습니다.");
         }
         this.productInventory -= reduceCount;
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
+    }
+
+    /**
+     * 상품 재고 증가
+     * @param increaseCount
+     */
+    public void increaseInventory(int increaseCount) {
+        if(increaseCount <= 0) {
+            // 요청 수량은 0보다 커야합니다.
+            throw new IllegalArgumentException("요청 수량은 0보다 커야합니다.");
+        }
+        this.productInventory += increaseCount;
         this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
 
