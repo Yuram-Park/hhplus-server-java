@@ -2,11 +2,19 @@ package kr.hhplus.be.server.domain;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
 @Entity
 @Table
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class UserCoupon {
 
     @Id
@@ -27,67 +35,6 @@ public class UserCoupon {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updatedAt;
-
-    public UserCoupon() {}
-
-    public UserCoupon(int couponId, boolean isUsed) {
-        this.couponId = couponId;
-        this.isUsed = isUsed;
-    }
-
-    public UserCoupon(int couponId, String userId, char couponType) {
-        this.couponId = couponId;
-        this.userId = userId;
-        this.couponType = couponType;
-    }
-
-    public int getCouponId() {
-        return couponId;
-    }
-
-    public void setCouponId(int couponId) {
-        this.couponId = couponId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public char getCouponType() {
-        return couponType;
-    }
-
-    public void setCouponType(char couponType) {
-        this.couponType = couponType;
-    }
-
-    public boolean isUsed() {
-        return isUsed;
-    }
-
-    public void setUsed(boolean used) {
-        isUsed = used;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
     // Business Logic
 
