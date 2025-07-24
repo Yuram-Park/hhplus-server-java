@@ -5,5 +5,5 @@ import kr.hhplus.be.server.domain.UserCoupon;
 
 public interface UserCouponRepository {
 
-    public UserCoupon createUserCoupon(String userId, Coupon coupon);
+    public UserCoupon createUserCoupon(UserCoupon userCoupon);
 }

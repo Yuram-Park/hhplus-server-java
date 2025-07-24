@@ -8,6 +8,7 @@ import kr.hhplus.be.server.domain.UserCoupon;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,12 +35,13 @@ public class CouponService {
                 char couponType = couponTypes[i];
                 Coupon coupon = couponRepository.findByCouponType(couponType);
                 String userId = userList.get(i).getUserId();
-                UserCoupon userCoupon = userCouponRepository.createUserCoupon(userId, coupon);
-                issuedList.put(userList.get(i).getUserId(), userCoupon);
+                UserCoupon userCoupon = new UserCoupon(null, userId, coupon.getCouponType(), false, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+                UserCoupon userCouponResult = userCouponRepository.createUserCoupon(userCoupon);
+                issuedList.put(userList.get(i).getUserId(), userCouponResult);
 
                 // 쿠폰 재고 차감
                 coupon.reduceCouponInventory();
-                couponRepository.updateByCouponType(coupon.getCouponType(), coupon.getCouponInventory());
+                couponRepository.updateByCouponType(coupon);
             }
         }
 

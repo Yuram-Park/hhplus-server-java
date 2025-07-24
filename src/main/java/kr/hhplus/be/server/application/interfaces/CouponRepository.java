@@ -5,5 +5,5 @@ import kr.hhplus.be.server.domain.Coupon;
 public interface CouponRepository {
 
     public Coupon findByCouponType(char couponType);
-    public Coupon updateByCouponType(char couponType, int couponInventory);
+    public Coupon updateByCouponType(Coupon coupon);
 }

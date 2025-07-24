@@ -19,7 +19,7 @@ public class UserCoupon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int couponId;
+    private Integer couponId;
 
     @Column(nullable = false)
     private String userId;

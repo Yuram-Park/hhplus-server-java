@@ -2,6 +2,8 @@ package kr.hhplus.be.server.application.interfaces;
 
 import kr.hhplus.be.server.domain.User;
 
+import java.util.Optional;
+
 public interface UserRepository {
 
     /**
@@ -9,9 +11,13 @@ public interface UserRepository {
      * @param userId
      * @return
      */
-    public User findPointById(String userId);
+    public Optional<User> findPointById(String userId);
 
-    public User updatePointById(String userId, int finalPoint);
+    /**
+     * 포인트를 변경한다.
+     * @param user
+     * @return
+     */
+    public User updatePointById(User user);
 
-    public User usePointById(String userId, int amount);
 }
