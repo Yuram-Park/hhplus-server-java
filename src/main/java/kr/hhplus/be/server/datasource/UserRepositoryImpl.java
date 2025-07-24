@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.datasource;
 
-import kr.hhplus.be.server.application.UserRepository;
+import kr.hhplus.be.server.application.interfaces.UserRepository;
 import kr.hhplus.be.server.domain.User;
 import org.springframework.stereotype.Repository;
 

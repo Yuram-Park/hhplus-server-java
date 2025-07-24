@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.datasource;
 
-import kr.hhplus.be.server.application.UserCouponRepository;
+import kr.hhplus.be.server.application.interfaces.UserCouponRepository;
 import kr.hhplus.be.server.domain.Coupon;
 import kr.hhplus.be.server.domain.UserCoupon;
 import org.springframework.stereotype.Repository;

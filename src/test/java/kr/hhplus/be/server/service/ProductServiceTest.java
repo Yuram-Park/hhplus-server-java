@@ -1,10 +1,8 @@
 package kr.hhplus.be.server.service;
 
-import kr.hhplus.be.server.application.ProductRepository;
 import kr.hhplus.be.server.application.service.ProductService;
 import kr.hhplus.be.server.datasource.ProductRepositoryImpl;
 import kr.hhplus.be.server.domain.Product;
-import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
