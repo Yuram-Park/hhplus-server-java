@@ -2,11 +2,19 @@ package kr.hhplus.be.server.domain;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
 @Entity
 @Table
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -29,81 +37,6 @@ public class User {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updatedAt;
-
-    public User() {}
-
-    public User(String userId, String userPassword, String userPhoneNumber, String userAddress, int userPoint, Timestamp createdAt, Timestamp updatedAt) {
-        this.userId = userId;
-        this.userPassword = userPassword;
-        this.userPhoneNumber = userPhoneNumber;
-        this.userAddress = userAddress;
-        this.userPoint = userPoint;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public User(String userId, int userPoint) {
-        this.userId = userId;
-        this.userPoint = userPoint;
-    }
-
-    // getter and setter
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
-    public String getUserPhoneNumber() {
-        return userPhoneNumber;
-    }
-
-    public void setUserPhoneNumber(String userPhoneNumber) {
-        this.userPhoneNumber = userPhoneNumber;
-    }
-
-    public String getUserAddress() {
-        return userAddress;
-    }
-
-    public void setUserAddress(String userAddress) {
-        this.userAddress = userAddress;
-    }
-
-    public int getUserPoint() {
-        return userPoint;
-    }
-
-    public void setUserPoint(int userPoint) {
-        this.userPoint = userPoint;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
     // Business Logic
 

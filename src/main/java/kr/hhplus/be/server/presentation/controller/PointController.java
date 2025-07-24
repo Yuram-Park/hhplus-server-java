@@ -1,15 +1,20 @@
-package kr.hhplus.be.server.presentation;
+package kr.hhplus.be.server.presentation.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.hhplus.be.server.application.service.PointService;
 import kr.hhplus.be.server.domain.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/point")
 @Tag(name = "포인트", description = "포인트 관련 API")
+@RequiredArgsConstructor
 public class PointController {
+
+    private final PointService pointService;
 
     /**
      * 포인트 잔액 조회
@@ -17,9 +22,9 @@ public class PointController {
      */
     @Operation(summary = "포인트 잔액 조회")
     @GetMapping("/userPoint")
-    public ResponseEntity<User> getUserPoint() {
-        // TODO 사용자 토큰으로 userId 추출
-        return ResponseEntity.ok(new User("1", 10000));
+    public ResponseEntity<User> getUserPoint(@RequestParam String userId) {
+        User user = pointService.getUserPoint(userId);
+        return ResponseEntity.ok(user);
     }
 
     /**
@@ -29,8 +34,8 @@ public class PointController {
      */
     @Operation(summary = "포인트 충전")
     @PostMapping("/charge")
-    public ResponseEntity<User> chargeUserPoint(@RequestParam int amount) {
-        // TODO 사용자 토큰으로 userId 추출
-        return ResponseEntity.ok(new User("1", 10000 + amount));
+    public ResponseEntity<User> chargeUserPoint(@RequestParam String userId, @RequestParam int amount) {
+        User user = pointService.chargePoint(userId, amount);
+        return ResponseEntity.ok(user);
     }
 }

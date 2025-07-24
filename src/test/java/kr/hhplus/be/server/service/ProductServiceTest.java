@@ -1,10 +1,8 @@
 package kr.hhplus.be.server.service;
 
-import kr.hhplus.be.server.application.ProductRepository;
 import kr.hhplus.be.server.application.service.ProductService;
 import kr.hhplus.be.server.datasource.ProductRepositoryImpl;
 import kr.hhplus.be.server.domain.Product;
-import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,16 +10,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,8 +49,8 @@ public class ProductServiceTest {
             productList.add(new Product("T01","티셔츠", "하얀색 티셔츠", 10, 10_000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
             productList.add(new Product("B01","청바지", "청바지", 5, 13_000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
             productList.add(new Product("O01","원피스", "뷔스티에 원피스", 6, 20_000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
-
-            when(productRepository.findByPagePerPage(anyInt(), anyInt())).thenReturn(productList);
+            Page<Product> pageResults = new PageImpl<>(productList);
+            when(productRepository.findByPagePerPage(any())).thenReturn(pageResults);
 
             // when
             List<Product> result = productService.getProductList(page, perPage);
@@ -75,7 +75,7 @@ public class ProductServiceTest {
             int originalInventory = 10;
 
             Product product = new Product(productId, productName, productDescription, originalInventory, productPrice, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
-            when(productRepository.findByProductId(anyString())).thenReturn(product);
+            when(productRepository.findByProductId(anyString())).thenReturn(Optional.of(product));
 
             // when
             Product result = productService.getProductDetail(productId);
@@ -96,7 +96,7 @@ public class ProductServiceTest {
             int originalInventory = 10;
 
             Product product = new Product(productId, productName, productDescription, originalInventory, productPrice, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
-            when(productRepository.findByProductId(anyString())).thenReturn(product);
+            when(productRepository.findByProductId(anyString())).thenReturn(Optional.of(product));
 
             // when
             Product result = productService.getProductDetail(productId);
@@ -122,8 +122,8 @@ public class ProductServiceTest {
             int reduceInventory = 6;
 
             Product product = new Product(productId, productName, productDescription, originalInventory, productPrice, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
-            when(productRepository.findByProductId(anyString())).thenReturn(product);
-            when(productRepository.updateByProductId(anyString(), anyInt())).thenReturn(new Product(productId, productName, productDescription, originalInventory - reduceInventory, productPrice, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
+            when(productRepository.findByProductId(anyString())).thenReturn(Optional.of(product));
+            when(productRepository.updateByProductId(any())).thenReturn(new Product(productId, productName, productDescription, originalInventory - reduceInventory, productPrice, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
 
             // when
             product = productService.reduceProduct(product.getProductId(), reduceInventory);
@@ -144,7 +144,7 @@ public class ProductServiceTest {
             int reduceInventory = 0;
 
             Product product = new Product(productId, productName, productDescription, originalInventory, productPrice, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
-            when(productRepository.findByProductId(anyString())).thenReturn(product);
+            when(productRepository.findByProductId(anyString())).thenReturn(Optional.of(product));
 
             // when, then
             assertThrows(IllegalArgumentException.class, () -> productService.reduceProduct(product.getProductId(), reduceInventory));
@@ -162,7 +162,7 @@ public class ProductServiceTest {
             int reduceInventory = 11;
 
             Product product = new Product(productId, productName, productDescription, originalInventory, productPrice, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
-            when(productRepository.findByProductId(anyString())).thenReturn(product);
+            when(productRepository.findByProductId(anyString())).thenReturn(Optional.of(product));
 
             // when, then
             assertThrows(IllegalArgumentException.class, () -> productService.reduceProduct(product.getProductId(), reduceInventory));

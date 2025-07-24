@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 public class PointService {
@@ -19,7 +21,7 @@ public class PointService {
      * @return
      */
     public User getUserPoint(String userId) {
-        return userRepository.findPointById(userId);
+        return userRepository.findPointById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
     }
 
     /**
@@ -29,9 +31,9 @@ public class PointService {
      * @return
      */
     public User chargePoint(String userId, int amount) {
-        User user = userRepository.findPointById(userId);
+        User user = userRepository.findPointById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
         user.chargePoint(amount);
-        return userRepository.updatePointById(user.getUserId(), user.getUserPoint());
+        return userRepository.updatePointById(user);
     }
 
     /**
@@ -41,8 +43,8 @@ public class PointService {
      * @return
      */
     public User usePoint(String userId, int amount) {
-        User user = userRepository.findPointById(userId);
+        User user = userRepository.findPointById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
         user.usePoint(amount);
-        return userRepository.updatePointById(user.getUserId(), user.getUserPoint());
+        return userRepository.updatePointById(user);
     }
 }
