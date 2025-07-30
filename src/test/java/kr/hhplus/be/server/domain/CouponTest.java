@@ -4,6 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Timestamp;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -36,7 +38,7 @@ public class CouponTest {
             void 재고_차감_성공() {
                 // given
                 int reduceCount = 2;
-                Product product = new Product("T01", 5);
+                Product product = new Product("T01", "티셔츠", "하얀색 티셔츠", 5, 10_000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
 
                 // when
                 product.reduceInventory(reduceCount);
@@ -50,7 +52,7 @@ public class CouponTest {
             void 영개_이하_요청_불가() {
                 // given
                 int reduceCount = 0;
-                Product product = new Product("T01", 5);
+                Product product = new Product("T01", "티셔츠", "하얀색 티셔츠", 5, 10_000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
 
                 // when, then
                 assertThrows(IllegalArgumentException.class, () -> product.reduceInventory(reduceCount));
@@ -61,7 +63,7 @@ public class CouponTest {
             void 재고량_초과_요청_불가() {
                 // given
                 int reduceCount = 6;
-                Product product = new Product("T01", 5);
+                Product product = new Product("T01", "티셔츠", "하얀색 티셔츠", 5, 10_000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
 
                 // when, then
                 assertThrows(IllegalArgumentException.class, () -> product.reduceInventory(reduceCount));
