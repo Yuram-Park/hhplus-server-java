@@ -43,7 +43,7 @@ public class PointServiceTest {
             int remainingPoints = 1000;
 
             User user = new User(userId, userPassword, null, null, remainingPoints, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
 
             // when
             User userResult = pointService.getUserPoint(user.getUserId());
@@ -68,8 +68,8 @@ public class PointServiceTest {
             int chargePoint = 1000;
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
 
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
-            when(userRepository.savePoint(any())).thenReturn(new User(userId, userPassword, null, null, startPoint + chargePoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
+            when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.save(any())).thenReturn(new User(userId, userPassword, null, null, startPoint + chargePoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
 
             // when
             user = pointService.chargePoint(user.getUserId(), chargePoint);
@@ -88,7 +88,7 @@ public class PointServiceTest {
             int chargePoint = 0;
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
 
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
 
             // when, then
             assertThrows(IllegalArgumentException.class, () -> pointService.chargePoint(user.getUserId(), chargePoint));
@@ -104,7 +104,7 @@ public class PointServiceTest {
             int chargePoint = 100_001;
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
 
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
 
             // when, then
             assertThrows(IllegalArgumentException.class, () -> pointService.chargePoint(user.getUserId(), chargePoint));
@@ -126,8 +126,8 @@ public class PointServiceTest {
 
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
 
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
-            when(userRepository.savePoint(any())).thenReturn(new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
+            when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.save(any())).thenReturn(new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
 
             // when
             pointService.usePoint(user.getUserId(), usePoint);
@@ -147,7 +147,7 @@ public class PointServiceTest {
 
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
 
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
             // when, then
             assertThrows(IllegalArgumentException.class, () -> pointService.usePoint(user.getUserId(), usePoint));
         }
@@ -162,7 +162,7 @@ public class PointServiceTest {
             int usePoint = 1001;
 
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
 
             // when, then
             assertThrows(IllegalArgumentException.class, () -> pointService.usePoint(user.getUserId(), usePoint));

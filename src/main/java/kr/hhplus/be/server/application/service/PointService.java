@@ -21,7 +21,7 @@ public class PointService {
      * @return
      */
     public User getUserPoint(String userId) {
-        return userRepository.findPointById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
+        return userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
     }
 
     /**
@@ -31,9 +31,9 @@ public class PointService {
      * @return
      */
     public User chargePoint(String userId, int amount) {
-        User user = userRepository.findPointById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
         user.chargePoint(amount);
-        return userRepository.updatePointById(user);
+        return userRepository.save(user);
     }
 
     /**
@@ -43,8 +43,8 @@ public class PointService {
      * @return
      */
     public User usePoint(String userId, int amount) {
-        User user = userRepository.findPointById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
         user.usePoint(amount);
-        return userRepository.updatePointById(user);
+        return userRepository.save(user);
     }
 }

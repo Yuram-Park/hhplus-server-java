@@ -49,7 +49,7 @@ public class ProductService {
     public Product reduceProduct(String productId, int reduceCount) {
         Product product = productRepository.findByProductId(productId).orElseThrow(() -> new NoSuchElementException(productId + " : 해당 상품이 존재하지 않습니다."));
         product.reduceInventory(reduceCount);
-        return productRepository.updateByProductId(product);
+        return productRepository.save(product);
     }
 
     /**
@@ -61,6 +61,6 @@ public class ProductService {
     public Product increaseProduct(String productId, int increaseCount) {
         Product product = productRepository.findByProductId(productId).orElseThrow(() -> new NoSuchElementException(productId + " : 해당 상품이 존재하지 않습니다."));
         product.increaseInventory(increaseCount);
-        return productRepository.updateByProductId(product);
+        return productRepository.save(product);
     }
 }
