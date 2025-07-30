@@ -16,10 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testcontainers.shaded.org.checkerframework.checker.units.qual.C;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,9 +52,9 @@ public class CouponServiceTest {
             userList.add(new User(userId2, "1111", null, null, 0, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
             userList.add(new User(userId3, "1111", null, null, 0, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
 
-            when(couponRepository.findByCouponType('A')).thenReturn(new Coupon('A', 30, 5));
-            when(couponRepository.findByCouponType('B')).thenReturn(new Coupon('B', 20, 4));
-            when(couponRepository.findByCouponType('C')).thenReturn(new Coupon('C', 10, 3));
+            when(couponRepository.findByCouponType('A')).thenReturn(Optional.of(new Coupon('A', 30, 5)));
+            when(couponRepository.findByCouponType('B')).thenReturn(Optional.of(new Coupon('B', 20, 4)));
+            when(couponRepository.findByCouponType('C')).thenReturn(Optional.of(new Coupon('C', 10, 3)));
 
             when(userCouponRepository.createUserCoupon(any(UserCoupon.class))).thenAnswer(invocation -> {
                 UserCoupon userCoupon = invocation.getArgument(0);
@@ -101,9 +98,9 @@ public class CouponServiceTest {
             userList.add(new User(userId3, "1111", null, null, 0, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
             userList.add(new User(userId4, "1111", null, null, 0, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
 
-            when(couponRepository.findByCouponType('A')).thenReturn(new Coupon('A', 30, 5));
-            when(couponRepository.findByCouponType('B')).thenReturn(new Coupon('B', 20, 4));
-            when(couponRepository.findByCouponType('C')).thenReturn(new Coupon('C', 10, 3));
+            when(couponRepository.findByCouponType('A')).thenReturn(Optional.of(new Coupon('A', 30, 5)));
+            when(couponRepository.findByCouponType('B')).thenReturn(Optional.of(new Coupon('B', 20, 4)));
+            when(couponRepository.findByCouponType('C')).thenReturn(Optional.of(new Coupon('C', 10, 3)));
 
             when(userCouponRepository.createUserCoupon(any(UserCoupon.class))).thenAnswer(invocation -> {
                 UserCoupon userCoupon = invocation.getArgument(0);

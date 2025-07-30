@@ -11,13 +11,13 @@ public interface UserRepository {
      * @param userId
      * @return
      */
-    public Optional<User> findPointById(String userId);
+    Optional<User> findPointById(String userId);
 
     /**
      * 포인트를 변경한다.
      * @param user
      * @return
      */
-    public User updatePointById(User user);
+    User savePoint(User user);
 
 }

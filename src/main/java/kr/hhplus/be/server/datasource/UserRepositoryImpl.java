@@ -20,7 +20,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User updatePointById(User user) {
+    public User savePoint(User user) {
         return userJpaRepository.save(user);
     }
 

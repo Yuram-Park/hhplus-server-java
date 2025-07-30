@@ -28,7 +28,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Product updateByProductId(Product product) {
+    public Product save(Product product) {
         return productJpaRepository.save(product);
     }
 }

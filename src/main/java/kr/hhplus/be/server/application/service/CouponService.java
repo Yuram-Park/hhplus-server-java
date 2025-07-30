@@ -35,7 +35,7 @@ public class CouponService {
                 issuedList.put(userList.get(i).getUserId(), null);
             } else {
                 char couponType = couponTypes[i];
-                Coupon coupon = couponRepository.findByCouponType(couponType);
+                Coupon coupon = couponRepository.findByCouponType(couponType).orElseThrow(() -> new NoSuchElementException(couponType + " : 해당하는 쿠폰 타입이 없습니다."));
                 String userId = userList.get(i).getUserId();
                 UserCoupon userCoupon = new UserCoupon(null, userId, coupon.getCouponType(), false, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
                 UserCoupon userCouponResult = userCouponRepository.createUserCoupon(userCoupon);

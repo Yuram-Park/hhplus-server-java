@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +37,7 @@ public class OrderService {
      * @param orderId
      * @return
      */
-    public Order getOrder(int orderId) {
+    public Optional<Order> getOrder(int orderId) {
         return orderRepository.findByOrderId(orderId);
     }
 }
