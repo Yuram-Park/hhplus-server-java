@@ -123,7 +123,7 @@ public class ProductServiceTest {
 
             Product product = new Product(productId, productName, productDescription, originalInventory, productPrice, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
             when(productRepository.findByProductId(anyString())).thenReturn(Optional.of(product));
-            when(productRepository.updateByProductId(any())).thenReturn(new Product(productId, productName, productDescription, originalInventory - reduceInventory, productPrice, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
+            when(productRepository.save(any())).thenReturn(new Product(productId, productName, productDescription, originalInventory - reduceInventory, productPrice, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
 
             // when
             product = productService.reduceProduct(product.getProductId(), reduceInventory);

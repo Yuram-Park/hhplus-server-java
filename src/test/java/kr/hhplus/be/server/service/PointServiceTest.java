@@ -69,7 +69,7 @@ public class PointServiceTest {
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
 
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
-            when(userRepository.updatePointById(any())).thenReturn(new User(userId, userPassword, null, null, startPoint + chargePoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
+            when(userRepository.savePoint(any())).thenReturn(new User(userId, userPassword, null, null, startPoint + chargePoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
 
             // when
             user = pointService.chargePoint(user.getUserId(), chargePoint);
@@ -127,7 +127,7 @@ public class PointServiceTest {
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
 
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
-            when(userRepository.updatePointById(any())).thenReturn(new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
+            when(userRepository.savePoint(any())).thenReturn(new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
 
             // when
             pointService.usePoint(user.getUserId(), usePoint);
