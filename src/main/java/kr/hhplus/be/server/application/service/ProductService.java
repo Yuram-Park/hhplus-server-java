@@ -3,9 +3,14 @@ package kr.hhplus.be.server.application.service;
 import kr.hhplus.be.server.datasource.ProductRepositoryImpl;
 import kr.hhplus.be.server.domain.Product;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +25,9 @@ public class ProductService {
      * @return
      */
     public List<Product> getProductList(int page, int perPage) {
-        return productRepository.findByPagePerPage(page, perPage);
+        Pageable pageable = PageRequest.of(page, perPage);
+        Page<Product> pageResult = productRepository.findByPagePerPage(pageable);
+        return pageResult.getContent();
     }
 
     /**
@@ -29,7 +36,8 @@ public class ProductService {
      * @return
      */
     public Product getProductDetail(String productId) {
-        return productRepository.findByProductId(productId);
+        return productRepository.findByProductId(productId)
+                .orElseThrow(() -> new NoSuchElementException(productId + " : 해당 상품이 존재하지 않습니다."));
     }
 
     /**
@@ -39,8 +47,20 @@ public class ProductService {
      * @return
      */
     public Product reduceProduct(String productId, int reduceCount) {
-        Product product = productRepository.findByProductId(productId);
+        Product product = productRepository.findByProductId(productId).orElseThrow(() -> new NoSuchElementException(productId + " : 해당 상품이 존재하지 않습니다."));
         product.reduceInventory(reduceCount);
-        return productRepository.updateByProductId(product.getProductId(), product.getProductInventory());
+        return productRepository.updateByProductId(product);
+    }
+
+    /**
+     * 상품 재고 증가
+     * @param productId
+     * @param increaseCount
+     * @return
+     */
+    public Product increaseProduct(String productId, int increaseCount) {
+        Product product = productRepository.findByProductId(productId).orElseThrow(() -> new NoSuchElementException(productId + " : 해당 상품이 존재하지 않습니다."));
+        product.increaseInventory(increaseCount);
+        return productRepository.updateByProductId(product);
     }
 }
