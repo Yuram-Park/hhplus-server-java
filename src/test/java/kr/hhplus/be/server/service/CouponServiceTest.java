@@ -69,7 +69,7 @@ public class CouponServiceTest {
                         new Timestamp(System.currentTimeMillis())
                 );
             });
-            when(couponRepository.updateByCouponType(any())).thenReturn(new Coupon());
+            when(couponRepository.save(any())).thenReturn(new Coupon());
 
             // when
             Map<String, UserCoupon> result = couponService.issueCoupon(userList);
@@ -116,7 +116,7 @@ public class CouponServiceTest {
                 );
             });
 
-            when(couponRepository.updateByCouponType(any())).thenReturn(new Coupon());
+            when(couponRepository.save(any())).thenReturn(new Coupon());
 
             // when
             Map<String, UserCoupon> result = couponService.issueCoupon(userList);

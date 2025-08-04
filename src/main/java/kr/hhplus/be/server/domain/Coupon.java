@@ -18,7 +18,7 @@ import lombok.Setter;
 public class Coupon {
 
     @Id
-    private char couponType;
+    private Character couponType;
 
     @Column(nullable = false)
     private int couponDiscountPercent;

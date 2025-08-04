@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface CouponRepository {
 
     Optional<Coupon> findByCouponType(char couponType);
-    Coupon updateByCouponType(Coupon coupon);
+    Coupon save(Coupon coupon);
 }

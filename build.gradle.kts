@@ -39,8 +39,8 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
 
     // DB
-    testImplementation("org.testcontainers:junit-jupiter:1.17.2")
-    testImplementation("org.testcontainers:mysql:1.17.2")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:mysql")
 	runtimeOnly("com.mysql:mysql-connector-j")
 
     // Test

@@ -43,7 +43,7 @@ public class CouponService {
 
                 // 쿠폰 재고 차감
                 coupon.reduceCouponInventory();
-                couponRepository.updateByCouponType(coupon);
+                couponRepository.save(coupon);
             }
         }
         return issuedList;
