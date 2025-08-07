@@ -55,7 +55,7 @@ public class OrderFacade {
      * @param productList
      * @return
      */
-    @Transactional
+//    @Transactional
     public Order requestPayment(String userId, Map<ProductRequestDto, Product> productList) {
 
         int totalPrice = 0;
