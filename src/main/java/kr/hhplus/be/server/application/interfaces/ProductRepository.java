@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ProductRepository {
 
-    public Page<Product> findByPagePerPage(Pageable pageable);
-    public Optional<Product> findByProductId(String productId);
-    public Product updateByProductId(Product product);
+    Page<Product> findByPagePerPage(Pageable pageable);
+    Optional<Product> findByProductId(String productId);
+    Product updateByProductId(Product product);
 }
