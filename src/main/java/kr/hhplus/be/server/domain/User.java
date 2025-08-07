@@ -38,6 +38,9 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updatedAt;
 
+    @Version
+    private Integer version;
+
     // Business Logic
 
     /**
