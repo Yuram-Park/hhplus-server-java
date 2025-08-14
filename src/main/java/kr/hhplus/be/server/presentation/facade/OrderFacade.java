@@ -9,6 +9,7 @@ import kr.hhplus.be.server.domain.User;
 import kr.hhplus.be.server.dto.ProductRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -54,6 +55,7 @@ public class OrderFacade {
      * @param productList
      * @return
      */
+//    @Transactional
     public Order requestPayment(String userId, Map<ProductRequestDto, Product> productList) {
 
         int totalPrice = 0;

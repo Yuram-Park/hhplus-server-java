@@ -2,8 +2,10 @@ package kr.hhplus.be.server.application.interfaces;
 
 import kr.hhplus.be.server.domain.Coupon;
 
+import java.util.Optional;
+
 public interface CouponRepository {
 
-    public Coupon findByCouponType(char couponType);
-    public Coupon updateByCouponType(Coupon coupon);
+    Optional<Coupon> findByCouponType(char couponType);
+    Coupon updateByCouponType(Coupon coupon);
 }

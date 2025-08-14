@@ -6,6 +6,8 @@ import kr.hhplus.be.server.domain.Coupon;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class CouponRepositoryImpl implements CouponRepository {
@@ -13,7 +15,7 @@ public class CouponRepositoryImpl implements CouponRepository {
     private final CouponJpaRepository couponJpaRepository;
 
     @Override
-    public Coupon findByCouponType(char couponType) {
+    public Optional<Coupon> findByCouponType(char couponType) {
         return couponJpaRepository.findByCouponType(couponType);
     }
 
