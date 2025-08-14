@@ -36,6 +36,9 @@ public class UserCoupon {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updatedAt;
 
+    @Version
+    private Integer version;
+
     // Business Logic
 
     /**

@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.sql.Timestamp;
 
 @Entity
-@Table
+@Table(name = "`user`")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -37,6 +37,9 @@ public class User {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updatedAt;
+
+    @Version
+    private Integer version;
 
     // Business Logic
 

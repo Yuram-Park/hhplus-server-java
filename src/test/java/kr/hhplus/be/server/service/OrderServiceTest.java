@@ -3,6 +3,7 @@ package kr.hhplus.be.server.service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import kr.hhplus.be.server.application.service.OrderService;
 import kr.hhplus.be.server.datasource.OrderRepositoryImpl;
@@ -92,7 +93,7 @@ public class OrderServiceTest {
             int orderId = 1;
 
             Order order = new Order(orderId, "ID01", 30_000, null, 0, 30_000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
-            when(orderRepository.findByOrderId(anyInt())).thenReturn(order);
+            when(orderRepository.findByOrderId(anyInt())).thenReturn(Optional.of(order));
 
             // when
             Order result = orderService.getOrder(orderId);

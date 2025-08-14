@@ -4,6 +4,9 @@ package kr.hhplus.be.server.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import java.sql.Timestamp;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -19,7 +22,7 @@ class UserTest {
         void 포인트_충전_성공() {
             // given
             int chargePoint = 1000;
-            User user = new User("ID01", 0);
+            User user = new User("ID01", "1111", null, null, 0, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
             // when
             user.chargePoint(chargePoint);
@@ -33,7 +36,7 @@ class UserTest {
         void 영원_이하_충전_불가() {
             // given
             int chargePoint = 0;
-            User user = new User("ID01", 1000);
+            User user = new User("ID01", "1111", null, null, 1000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
             // when, then
             assertThrows(IllegalArgumentException.class, () -> user.chargePoint(chargePoint));
@@ -43,8 +46,8 @@ class UserTest {
         @DisplayName("100,000원 까지만 충전이 가능하다.")
         void 최대_충전_금액() {
             // given
-            int chargePoint = 55_000;
-            User user = new User("ID01", 50_000);
+            int chargePoint = 50_001;
+            User user = new User("ID01", "1111", null, null, 50_000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
             // when, then
             assertThrows(IllegalArgumentException.class, () -> user.chargePoint(chargePoint));
@@ -60,7 +63,7 @@ class UserTest {
         void 포인트_사용_성공() {
             // given
             int usePoint = 1000;
-            User user = new User("ID01", 2000);
+            User user = new User("ID01", "1111", null, null, 2000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
             // when
             user.usePoint(usePoint);
@@ -74,7 +77,7 @@ class UserTest {
         void 영원_이하_차감_불가() {
             // given
             int usePoint = 0;
-            User user = new User("ID01", 1000);
+            User user = new User("ID01", "1111", null, null, 1000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
             // when, then
             assertThrows(IllegalArgumentException.class,() -> user.usePoint(usePoint));
@@ -85,7 +88,7 @@ class UserTest {
         void 잔액_초과_차감_불가() {
             // given
             int usePoint = 2000;
-            User user = new User("ID01", 1000);
+            User user = new User("ID01", "1111", null, null, 1000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
             // when, then
             assertThrows(IllegalArgumentException.class, () -> user.usePoint(usePoint));

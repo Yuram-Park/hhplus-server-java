@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.sql.Timestamp;
 
 @Entity
-@Table
+@Table(name = "`order`")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

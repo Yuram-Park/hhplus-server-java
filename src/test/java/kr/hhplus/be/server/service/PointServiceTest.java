@@ -42,7 +42,7 @@ public class PointServiceTest {
             String userPassword = "1111";
             int remainingPoints = 1000;
 
-            User user = new User(userId, userPassword, null, null, remainingPoints, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+            User user = new User(userId, userPassword, null, null, remainingPoints, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
 
             // when
@@ -66,10 +66,10 @@ public class PointServiceTest {
             String userPassword = "1111";
             int startPoint = 0;
             int chargePoint = 1000;
-            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
-            when(userRepository.updatePointById(any())).thenReturn(new User(userId, userPassword, null, null, startPoint + chargePoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
+            when(userRepository.updatePointById(any())).thenReturn(new User(userId, userPassword, null, null, startPoint + chargePoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0));
 
             // when
             user = pointService.chargePoint(user.getUserId(), chargePoint);
@@ -86,7 +86,7 @@ public class PointServiceTest {
             String userPassword = "1111";
             int startPoint = 0;
             int chargePoint = 0;
-            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
 
@@ -102,7 +102,7 @@ public class PointServiceTest {
             String userPassword = "1111";
             int startPoint = 0;
             int chargePoint = 100_001;
-            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
 
@@ -124,10 +124,10 @@ public class PointServiceTest {
             int startPoint = 5000;
             int usePoint = 1000;
 
-            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
-            when(userRepository.updatePointById(any())).thenReturn(new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
+            when(userRepository.updatePointById(any())).thenReturn(new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0));
 
             // when
             pointService.usePoint(user.getUserId(), usePoint);
@@ -145,7 +145,7 @@ public class PointServiceTest {
             int startPoint = 5000;
             int usePoint = 0;
 
-            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
             // when, then
@@ -161,7 +161,7 @@ public class PointServiceTest {
             int startPoint = 1000;
             int usePoint = 1001;
 
-            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+            User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
 
             // when, then
