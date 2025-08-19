@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.application.service;
 
+import kr.hhplus.be.server.common.DistributedLock;
 import kr.hhplus.be.server.datasource.ProductRepositoryImpl;
 import kr.hhplus.be.server.domain.Product;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,8 @@ public class ProductService {
      * @param reduceCount
      * @return
      */
+
+    @DistributedLock(key = "'product:' + #productId")
     public Product reduceProduct(String productId, int reduceCount) {
         Product product = productRepository.findByProductId(productId).orElseThrow(() -> new NoSuchElementException(productId + " : 해당 상품이 존재하지 않습니다."));
         product.reduceInventory(reduceCount);

@@ -15,7 +15,6 @@ public interface ProductJpaRepository extends JpaRepository<Product, String> {
 
     Page<Product> findAll(Pageable pageable);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Product> findById(String product_id);
 
     Product save(Product product);

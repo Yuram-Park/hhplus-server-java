@@ -3,6 +3,7 @@ package kr.hhplus.be.server.presentation.facade;
 import kr.hhplus.be.server.application.service.OrderService;
 import kr.hhplus.be.server.application.service.PointService;
 import kr.hhplus.be.server.application.service.ProductService;
+import kr.hhplus.be.server.common.DistributedLock;
 import kr.hhplus.be.server.domain.Order;
 import kr.hhplus.be.server.domain.Product;
 import kr.hhplus.be.server.domain.User;
@@ -56,6 +57,7 @@ public class OrderFacade {
      * @return
      */
 //    @Transactional
+//    @DistributedLock(key = "#lockName")
     public Order requestPayment(String userId, Map<ProductRequestDto, Product> productList) {
 
         int totalPrice = 0;
