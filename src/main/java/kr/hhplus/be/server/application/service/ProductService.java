@@ -9,6 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,6 +37,7 @@ public class ProductService {
      * @param productId
      * @return
      */
+    @Transactional(readOnly = true)
     public Product getProductDetail(String productId) {
         return productRepository.findByProductId(productId)
                 .orElseThrow(() -> new NoSuchElementException(productId + " : 해당 상품이 존재하지 않습니다."));
@@ -46,8 +49,9 @@ public class ProductService {
      * @param reduceCount
      * @return
      */
+    @Transactional
     public Product reduceProduct(String productId, int reduceCount) {
-        Product product = productRepository.findByProductId(productId).orElseThrow(() -> new NoSuchElementException(productId + " : 해당 상품이 존재하지 않습니다."));
+        Product product = productRepository.findByProductIdWithLock(productId).orElseThrow(() -> new NoSuchElementException(productId + " : 해당 상품이 존재하지 않습니다."));
         product.reduceInventory(reduceCount);
         return productRepository.updateByProductId(product);
     }
