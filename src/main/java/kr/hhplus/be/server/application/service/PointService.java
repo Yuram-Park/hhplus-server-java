@@ -43,7 +43,7 @@ public class PointService {
      * @param amount
      * @return
      */
-    @DistributedLock(key = "'point:' + #userId")
+//    @DistributedLock(key = "'point:' + #userId")
     public User usePoint(String userId, int amount) {
         User user = userRepository.findPointById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
         user.usePoint(amount);

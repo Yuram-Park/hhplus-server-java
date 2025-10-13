@@ -18,6 +18,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final ProductJpaRepository productJpaRepository;
 
     @Override
+    public Optional<Product> findByProductIdWithLock(String productId) {
+        return productJpaRepository.findByIdWithLock(productId);
+    }
+
+    @Override
     public Page<Product> findByPagePerPage(Pageable pageable) {
         return productJpaRepository.findAll(pageable);
     }

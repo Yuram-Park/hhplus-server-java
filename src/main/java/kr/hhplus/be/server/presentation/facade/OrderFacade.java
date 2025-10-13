@@ -56,8 +56,8 @@ public class OrderFacade {
      * @param productList
      * @return
      */
-//    @Transactional
-//    @DistributedLock(key = "#lockName")
+    @Transactional
+    @DistributedLock(key = "'user:' + #userId")
     public Order requestPayment(String userId, Map<ProductRequestDto, Product> productList) {
 
         int totalPrice = 0;

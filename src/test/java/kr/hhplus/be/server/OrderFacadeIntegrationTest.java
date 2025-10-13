@@ -49,7 +49,7 @@ public class OrderFacadeIntegrationTest extends IntegrationTestContext{
 
     @BeforeEach
     void setUp() {
-        Product product = new Product("T01", "티셔츠", "하얀색 티셔츠", 1, 10_000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+        Product product = new Product("T01", "티셔츠", "하얀색 티셔츠", 1, 100, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
         productRepository.updateByProductId(product);
         Product product2 = new Product("B01", "바지", "청바지", 100, 20_000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
         productRepository.updateByProductId(product2);
@@ -101,7 +101,7 @@ public class OrderFacadeIntegrationTest extends IntegrationTestContext{
     @DisplayName("상품 재고 차감 100건 분산락 적용 성공")
     void 상품재고차감_분산락_적용_동시성_테스트() throws InterruptedException {
         // given
-        String productId = "B01";
+        String productId = "T01";
 
         int numberOfThreads = 100;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
@@ -149,5 +149,43 @@ public class OrderFacadeIntegrationTest extends IntegrationTestContext{
         User user = pointService.getUserPoint(userId);
 
         assertThat(user.getUserPoint()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("상품 결제(상품 재고 차감, 포인트 사용) 100번 분산락 적용 성공")
+    void 상품_결제_분산락_적용_테스트() throws InterruptedException {
+        // given
+        String productId = "B01";
+        String userId = "abc123";
+
+        Product product = productService.getProductDetail(productId);
+
+        Map<ProductRequestDto, Product> productList = new HashMap<>();
+        productList.put(new ProductRequestDto(productId, 1, true), product);
+
+        int numberOfThreads = 100;
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for(int i = 0; i < numberOfThreads; i++) {
+            executorService.submit(() -> {
+                try {
+                    orderFacade.requestPayment(userId, productList);
+                } finally {
+                    latch.countDown();
+                }
+
+            });
+        }
+        latch.await();
+
+        User userResult = pointService.getUserPoint(userId);
+        Product productResult = productService.getProductDetail(productId);
+
+        assertThat(userResult.getUserPoint()).isEqualTo(0);
+        assertThat(productResult.getProductInventory()).isEqualTo(0);
+
+
+
     }
 }
