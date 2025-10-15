@@ -1,5 +1,6 @@
-package kr.hhplus.be.server.domain;
+package kr.hhplus.be.server.domain.coupon;
 
+import kr.hhplus.be.server.domain.Coupon;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

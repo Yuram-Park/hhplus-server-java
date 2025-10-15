@@ -31,5 +31,10 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
         return userCouponJpaRepository.findAllByUserId(userId);
     }
 
+    @Override
+    public UserCoupon updateUserCoupon(UserCoupon userCoupon) {
+        return userCouponJpaRepository.save(userCoupon);
+    }
+
 
 }

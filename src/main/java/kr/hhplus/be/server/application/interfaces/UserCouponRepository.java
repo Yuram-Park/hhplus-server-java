@@ -13,4 +13,6 @@ public interface UserCouponRepository {
     public Optional<UserCoupon> getUserCouponInfo(int couponId);
 
     public List<UserCoupon> getUserCouponList(String userId);
+
+    public UserCoupon updateUserCoupon(UserCoupon userCoupon);
 }
