@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class UserCouponService {
 
-    private UserCouponRepositoryImpl userCouponRepository;
+    private final UserCouponRepositoryImpl userCouponRepository;
 
     /**
      * 사용자 쿠폰 목록 조회
