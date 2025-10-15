@@ -47,12 +47,12 @@ public class UserCouponService {
     }
 
     /**
-     * 사용자 쿠폰 재고 차감
+     * 사용자 쿠폰 사용
      * @param couponId
      * @param payment
      * @return
      */
-    public UserCoupon reduceUserCoupon(int couponId, int payment) {
+    public UserCoupon useUserCoupon(int couponId, int payment) {
         UserCoupon userCoupon = userCouponRepository.getUserCouponInfo(couponId).orElseThrow(() -> new NoSuchElementException(couponId + ": 해당하는 쿠폰이 없습니다."));
 
         userCoupon.useThisCoupon(payment);
