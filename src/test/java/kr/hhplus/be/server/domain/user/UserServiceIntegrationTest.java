@@ -28,7 +28,7 @@ public class UserServiceIntegrationTest extends IntegrationTestContext {
 
     @BeforeEach
     void setUp() {
-        User user = new User("user1", "1111", null, null, 0, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), null);
+        User user = new User("user1", "1111", null, null, 5000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), null);
         userExample = userService.registerUser(user);
     }
 
@@ -71,7 +71,44 @@ public class UserServiceIntegrationTest extends IntegrationTestContext {
             // then
             User result = userService.getUserPoint(userId);
 
-            assertThat(result.getUserPoint()).isEqualTo(chargePoint);
+            assertThat(result.getUserPoint()).isEqualTo(userExample.getUserPoint() + chargePoint);
+            assertThat(success.get()).isEqualTo(1);
+            assertThat(fail.get()).isEqualTo(1);
+        }
+
+        @Test
+        @DisplayName("포인트 사용 동시 요청 시 최초 한번만 정상적으로 사용된다.")
+        void 포인트_사용_동시성_성공() throws InterruptedException {
+            // given
+            String userId = userExample.getUserId();
+            int usePoint = 1000;
+            int numberOfThreads = 2;
+
+            ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+            CountDownLatch latch = new CountDownLatch(numberOfThreads);
+            AtomicInteger success = new AtomicInteger(0);
+            AtomicInteger fail = new AtomicInteger(0);
+
+            // when
+            for(int i = 0; i < numberOfThreads; i++) {
+                executorService.submit(() -> {
+                    try {
+                        userService.usePoint(userId, usePoint);
+                        success.incrementAndGet();
+                    } catch (Exception e) {
+                        fail.incrementAndGet();
+                    } finally {
+                        latch.countDown();
+                    }
+                });
+            }
+
+            latch.await();
+
+            // then
+            User result = userService.getUserPoint(userId);
+
+            assertThat(result.getUserPoint()).isEqualTo(userExample.getUserPoint() - usePoint);
             assertThat(success.get()).isEqualTo(1);
             assertThat(fail.get()).isEqualTo(1);
         }
