@@ -25,7 +25,7 @@ public class UserCoupon {
     private String userId;
 
     @Column(nullable = false)
-    private char couponType;
+    private String couponType;
 
     @Column(nullable = false, columnDefinition = "boolean default FALSE")
     private boolean isUsed;

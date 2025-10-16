@@ -41,7 +41,7 @@ public class UserCouponServiceTest {
         void 사용자_쿠폰발급_정상() {
             // given
             String userId = "user1";
-            char couponType = 'A';
+            String couponType = "A";
             UserCoupon userCoupon = new UserCoupon(1, userId, couponType, false, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 1);
 
             when(userCouponRepository.createUserCoupon(any())).thenReturn(userCoupon);
@@ -65,7 +65,7 @@ public class UserCouponServiceTest {
         void 사용자_쿠폰_사용_정상() {
             // given
             String userId = "user1";
-            char couponType = 'A';
+            String couponType = "A";
             int couponId = 1;
             int payment = 55000;
             UserCoupon userCoupon = new UserCoupon(couponId, userId, couponType, false, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 1);

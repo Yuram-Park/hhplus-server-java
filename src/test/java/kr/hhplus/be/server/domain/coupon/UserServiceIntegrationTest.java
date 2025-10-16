@@ -35,7 +35,7 @@ public class UserServiceIntegrationTest extends IntegrationTestContext {
     @BeforeEach
     void setUp() {
         user = new User("userId", "1111", null, null, 50000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), null); // 더 쉽게 생성하는 법?
-        userCoupon = userCouponService.createUserCoupon(user.getUserId(), 'A');
+        userCoupon = userCouponService.createUserCoupon(user.getUserId(), "A");
     }
 
     @Nested

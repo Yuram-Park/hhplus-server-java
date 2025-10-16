@@ -42,7 +42,7 @@ public class CouponController {
     @Operation(summary = "선착순 쿠폰 발급")
     @PostMapping("/issue")
     public ResponseEntity<Map<String, UserCoupon>> issueCoupon(List<User> userList) {
-        return ResponseEntity.ok(couponService.issueCoupon(userList));
+        return ResponseEntity.ok(couponService.issueFcfsCoupon(userList));
     }
 
 }

@@ -40,7 +40,7 @@ public class UserCouponService {
      * @param couponType
      * @return
      */
-    public UserCoupon createUserCoupon(String userId, char couponType) {
+    public UserCoupon createUserCoupon(String userId, String couponType) {
         UserCoupon userCoupon = new UserCoupon(null, userId, couponType, false, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), null);
 
         return userCouponRepository.createUserCoupon(userCoupon);

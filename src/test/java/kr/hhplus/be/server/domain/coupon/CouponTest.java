@@ -14,10 +14,10 @@ public class CouponTest {
     void 쿠폰_발급_성공() {
         // given
         int couponInventory = 1;
-        Coupon coupon = new Coupon('A', 30, couponInventory);
+        Coupon coupon = new Coupon("A", 30, couponInventory);
 
         // when
-        coupon.reduceCouponInventory();
+        coupon.reduceCouponInventory(1);
 
         // then
         assertThat(coupon.getCouponInventory()).isEqualTo(couponInventory - 1);
