@@ -15,6 +15,11 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserJpaRepository userJpaRepository;
 
     @Override
+    public User updateUserById(User user) {
+        return userJpaRepository.save(user);
+    }
+
+    @Override
     public Optional<User> findPointById(String userId) {
         return userJpaRepository.findById(userId);
     }

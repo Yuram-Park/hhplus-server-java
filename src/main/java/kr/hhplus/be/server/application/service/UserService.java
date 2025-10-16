@@ -2,8 +2,6 @@ package kr.hhplus.be.server.application.service;
 
 import kr.hhplus.be.server.datasource.UserRepositoryImpl;
 import kr.hhplus.be.server.domain.User;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +9,18 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class PointService {
+public class UserService {
 
     private final UserRepositoryImpl userRepository;
+
+    /**
+     * 사용자 등록
+     * @param user
+     * @return
+     */
+    public User registerUser(User user) {
+        return userRepository.findPointById(user.getUserId()).orElseGet(() -> userRepository.updateUserById(user));
+    }
 
     /**
      * 포인트 조회

@@ -1,6 +1,6 @@
-package kr.hhplus.be.server.service;
+package kr.hhplus.be.server.domain.user;
 
-import kr.hhplus.be.server.application.service.PointService;
+import kr.hhplus.be.server.application.service.UserService;
 import kr.hhplus.be.server.datasource.UserRepositoryImpl;
 import kr.hhplus.be.server.domain.User;
 import org.junit.jupiter.api.DisplayName;
@@ -21,13 +21,13 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("PointService 테스트")
-public class PointServiceTest {
+public class UserServiceTest {
 
     @Mock
     private UserRepositoryImpl userRepository;
 
     @InjectMocks
-    private PointService pointService;
+    private UserService userService;
 
 
     @Nested
@@ -46,7 +46,7 @@ public class PointServiceTest {
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
 
             // when
-            User userResult = pointService.getUserPoint(user.getUserId());
+            User userResult = userService.getUserPoint(user.getUserId());
 
             // then
             assertThat(userResult.getUserPoint()).isEqualTo(user.getUserPoint());
@@ -72,7 +72,7 @@ public class PointServiceTest {
             when(userRepository.updatePointById(any())).thenReturn(new User(userId, userPassword, null, null, startPoint + chargePoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0));
 
             // when
-            user = pointService.chargePoint(user.getUserId(), chargePoint);
+            user = userService.chargePoint(user.getUserId(), chargePoint);
 
             // then
             assertThat(user.getUserPoint()).isEqualTo(startPoint + chargePoint);
@@ -91,7 +91,7 @@ public class PointServiceTest {
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
 
             // when, then
-            assertThrows(IllegalArgumentException.class, () -> pointService.chargePoint(user.getUserId(), chargePoint));
+            assertThrows(IllegalArgumentException.class, () -> userService.chargePoint(user.getUserId(), chargePoint));
         }
 
         @Test
@@ -107,7 +107,7 @@ public class PointServiceTest {
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
 
             // when, then
-            assertThrows(IllegalArgumentException.class, () -> pointService.chargePoint(user.getUserId(), chargePoint));
+            assertThrows(IllegalArgumentException.class, () -> userService.chargePoint(user.getUserId(), chargePoint));
         }
     }
 
@@ -130,7 +130,7 @@ public class PointServiceTest {
             when(userRepository.updatePointById(any())).thenReturn(new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0));
 
             // when
-            pointService.usePoint(user.getUserId(), usePoint);
+            userService.usePoint(user.getUserId(), usePoint);
 
             // then
             assertThat(user.getUserPoint()).isEqualTo(startPoint - usePoint);
@@ -149,7 +149,7 @@ public class PointServiceTest {
 
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
             // when, then
-            assertThrows(IllegalArgumentException.class, () -> pointService.usePoint(user.getUserId(), usePoint));
+            assertThrows(IllegalArgumentException.class, () -> userService.usePoint(user.getUserId(), usePoint));
         }
 
         @Test
@@ -165,7 +165,7 @@ public class PointServiceTest {
             when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
 
             // when, then
-            assertThrows(IllegalArgumentException.class, () -> pointService.usePoint(user.getUserId(), usePoint));
+            assertThrows(IllegalArgumentException.class, () -> userService.usePoint(user.getUserId(), usePoint));
         }
     }
 }
