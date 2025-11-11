@@ -2,7 +2,7 @@ package kr.hhplus.be.server.presentation.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.application.service.PointService;
+import kr.hhplus.be.server.application.service.UserService;
 import kr.hhplus.be.server.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PointController {
 
-    private final PointService pointService;
+    private final UserService userService;
 
     /**
      * 포인트 잔액 조회
@@ -23,7 +23,7 @@ public class PointController {
     @Operation(summary = "포인트 잔액 조회")
     @GetMapping("/userPoint")
     public ResponseEntity<User> getUserPoint(@RequestParam String userId) {
-        User user = pointService.getUserPoint(userId);
+        User user = userService.getUserPoint(userId);
         return ResponseEntity.ok(user);
     }
 
@@ -35,7 +35,7 @@ public class PointController {
     @Operation(summary = "포인트 충전")
     @PostMapping("/charge")
     public ResponseEntity<User> chargeUserPoint(@RequestParam String userId, @RequestParam int amount) {
-        User user = pointService.chargePoint(userId, amount);
+        User user = userService.chargePoint(userId, amount);
         return ResponseEntity.ok(user);
     }
 }

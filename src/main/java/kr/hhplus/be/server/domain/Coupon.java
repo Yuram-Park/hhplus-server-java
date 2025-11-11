@@ -18,7 +18,7 @@ import lombok.Setter;
 public class Coupon {
 
     @Id
-    private char couponType;
+    private String couponType;
 
     @Column(nullable = false)
     private int couponDiscountPercent;
@@ -26,7 +26,15 @@ public class Coupon {
     @Column(nullable = false)
     private int couponInventory;
 
-    public void reduceCouponInventory() {
-        this.couponInventory -= 1;
+    public void reduceCouponInventory(int reduceNum) {
+        // 요청 차감 수는 0보다 커야 합니다.
+        if(reduceNum <= 0) {
+            throw new IllegalArgumentException("요청 차감 수는 0보다 커야 합니다.");
+        }
+        // 요청 차감 수는 재고 수보다 많아야 합니다.
+        if(reduceNum > this.couponInventory) {
+            throw new IllegalArgumentException("요청 차감 수는 쿠폰 재고 수보다 많아야 합니다.");
+        }
+        this.couponInventory -= reduceNum;
     }
 }

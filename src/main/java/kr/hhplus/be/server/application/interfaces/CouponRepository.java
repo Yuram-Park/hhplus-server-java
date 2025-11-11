@@ -6,6 +6,9 @@ import java.util.Optional;
 
 public interface CouponRepository {
 
-    Optional<Coupon> findByCouponType(char couponType);
+    // 재고 관리용 Lock 메서드
+    Optional<Coupon> findByCouponTypeWithLock(String couponType);
+
+    Optional<Coupon> findByCouponType(String couponType);
     Coupon updateByCouponType(Coupon coupon);
 }

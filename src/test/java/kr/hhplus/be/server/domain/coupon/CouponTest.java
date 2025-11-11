@@ -1,5 +1,6 @@
-package kr.hhplus.be.server.domain;
+package kr.hhplus.be.server.domain.coupon;
 
+import kr.hhplus.be.server.domain.Coupon;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,10 +14,10 @@ public class CouponTest {
     void 쿠폰_발급_성공() {
         // given
         int couponInventory = 1;
-        Coupon coupon = new Coupon('A', 30, couponInventory);
+        Coupon coupon = new Coupon("A", 30, couponInventory);
 
         // when
-        coupon.reduceCouponInventory();
+        coupon.reduceCouponInventory(1);
 
         // then
         assertThat(coupon.getCouponInventory()).isEqualTo(couponInventory - 1);

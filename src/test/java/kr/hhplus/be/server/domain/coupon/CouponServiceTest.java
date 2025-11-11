@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.service;
+package kr.hhplus.be.server.domain.coupon;
 
 import kr.hhplus.be.server.application.service.CouponService;
 import kr.hhplus.be.server.datasource.CouponRepositoryImpl;
@@ -13,11 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.testcontainers.shaded.org.checkerframework.checker.units.qual.C;
 
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -52,15 +50,15 @@ public class CouponServiceTest {
             userList.add(new User(userId2, "1111", null, null, 0, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0));
             userList.add(new User(userId3, "1111", null, null, 0, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0));
 
-            when(couponRepository.findByCouponType('A')).thenReturn(Optional.of(new Coupon('A', 30, 5)));
-            when(couponRepository.findByCouponType('B')).thenReturn(Optional.of(new Coupon('B', 20, 4)));
-            when(couponRepository.findByCouponType('C')).thenReturn(Optional.of(new Coupon('C', 10, 3)));
+            when(couponRepository.findByCouponType("A")).thenReturn(Optional.of(new Coupon("A", 30, 5)));
+            when(couponRepository.findByCouponType("B")).thenReturn(Optional.of(new Coupon("B", 20, 4)));
+            when(couponRepository.findByCouponType("C")).thenReturn(Optional.of(new Coupon("C", 10, 3)));
 
             when(userCouponRepository.createUserCoupon(any(UserCoupon.class))).thenAnswer(invocation -> {
                 UserCoupon userCoupon = invocation.getArgument(0);
                 String userId = userCoupon.getUserId();
 
-                char couponType = userCoupon.getCouponType();
+                String couponType = userCoupon.getCouponType();
 
                 return new UserCoupon(
                         0, // id
@@ -75,7 +73,7 @@ public class CouponServiceTest {
             when(couponRepository.updateByCouponType(any())).thenReturn(new Coupon());
 
             // when
-            Map<String, UserCoupon> result = couponService.issueCoupon(userList);
+            Map<String, UserCoupon> result = couponService.issueFcfsCoupon(userList);
 
             // then
             for(String userId : result.keySet()) {
@@ -99,15 +97,15 @@ public class CouponServiceTest {
             userList.add(new User(userId3, "1111", null, null, 0, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0));
             userList.add(new User(userId4, "1111", null, null, 0, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0));
 
-            when(couponRepository.findByCouponType('A')).thenReturn(Optional.of(new Coupon('A', 30, 5)));
-            when(couponRepository.findByCouponType('B')).thenReturn(Optional.of(new Coupon('B', 20, 4)));
-            when(couponRepository.findByCouponType('C')).thenReturn(Optional.of(new Coupon('C', 10, 3)));
+            when(couponRepository.findByCouponType("A")).thenReturn(Optional.of(new Coupon("A", 30, 5)));
+            when(couponRepository.findByCouponType("B")).thenReturn(Optional.of(new Coupon("B", 20, 4)));
+            when(couponRepository.findByCouponType("C")).thenReturn(Optional.of(new Coupon("C", 10, 3)));
 
             when(userCouponRepository.createUserCoupon(any(UserCoupon.class))).thenAnswer(invocation -> {
                 UserCoupon userCoupon = invocation.getArgument(0);
                 String userId = userCoupon.getUserId();
 
-                char couponType = userCoupon.getCouponType();
+                String couponType = userCoupon.getCouponType();
 
                 return new UserCoupon(
                         0, // id
@@ -123,7 +121,7 @@ public class CouponServiceTest {
             when(couponRepository.updateByCouponType(any())).thenReturn(new Coupon());
 
             // when
-            Map<String, UserCoupon> result = couponService.issueCoupon(userList);
+            Map<String, UserCoupon> result = couponService.issueFcfsCoupon(userList);
 
             // then
             int idx = 0;

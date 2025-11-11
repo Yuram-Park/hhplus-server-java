@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.presentation.facade;
 
 import kr.hhplus.be.server.application.service.OrderService;
-import kr.hhplus.be.server.application.service.PointService;
+import kr.hhplus.be.server.application.service.UserService;
 import kr.hhplus.be.server.application.service.ProductService;
 import kr.hhplus.be.server.domain.Order;
 import kr.hhplus.be.server.domain.Product;
@@ -9,7 +9,6 @@ import kr.hhplus.be.server.domain.User;
 import kr.hhplus.be.server.dto.ProductRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -21,7 +20,7 @@ import java.util.Map;
 public class OrderFacade {
 
     private final ProductService productService;
-    private final PointService pointService;
+    private final UserService userService;
     private final OrderService orderService;
 
     /**
@@ -66,7 +65,7 @@ public class OrderFacade {
         }
 
         // 잔액 확인 요청
-        User user = pointService.getUserPoint(userId);
+        User user = userService.getUserPoint(userId);
 
         // 주문금액 <= 잔액 : 주문 가능
         if(totalPrice <= user.getUserPoint()) {
@@ -85,7 +84,7 @@ public class OrderFacade {
 
             // 포인트 사용(결제) 요청
             try {
-                pointService.usePoint(user.getUserId(), totalPrice);
+                userService.usePoint(user.getUserId(), totalPrice);
             } catch (Exception e) {
                 // 결제 실패 시 상품 재고 복구
                 for(ProductRequestDto dto : productList.keySet()) {

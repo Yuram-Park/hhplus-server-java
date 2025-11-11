@@ -1,6 +1,7 @@
-package kr.hhplus.be.server.domain;
+package kr.hhplus.be.server.domain.user;
 
 
+import kr.hhplus.be.server.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

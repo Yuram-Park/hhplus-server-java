@@ -9,7 +9,6 @@ fun getGitHash(): String {
 		commandLine("git", "rev-parse", "--short", "HEAD")
 	}.standardOutput.asText.get().trim()
 }
-
 group = "kr.hhplus.be"
 version = getGitHash()
 

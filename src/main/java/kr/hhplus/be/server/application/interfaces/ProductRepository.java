@@ -9,6 +9,9 @@ import java.util.Optional;
 
 public interface ProductRepository {
 
+    // 재고 감소용 쓰기 잠금 메서드
+    Optional<Product> findByProductIdWithLock(String productId);
+
     Page<Product> findByPagePerPage(Pageable pageable);
     Optional<Product> findByProductId(String productId);
     Product updateByProductId(Product product);

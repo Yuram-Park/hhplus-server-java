@@ -17,6 +17,12 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     private final ProductJpaRepository productJpaRepository;
 
+    // 재고 감소용 쓰기 잠금 메서드
+    @Override
+    public Optional<Product> findByProductIdWithLock(String productId) {
+        return productJpaRepository.findByIdWithLock(productId);
+    }
+
     @Override
     public Page<Product> findByPagePerPage(Pageable pageable) {
         return productJpaRepository.findAll(pageable);
