@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RedissonConfig {
 
-    @Value("${redis.stand-alone.host}")
+    @Value("${spring.data.redis.host}")
     private String host;
 
-    @Value("${redis.stand-alone.port")
+    @Value("${spring.data.redis.port}")
     private int port;
 
     @Bean

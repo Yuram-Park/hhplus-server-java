@@ -62,5 +62,6 @@ public class CouponServiceIntegrationTest extends IntegrationTestContext {
             Coupon result = couponService.getCouponInfo(couponType);
             assertThat(result.getCouponInventory()).isEqualTo(couponExample.getCouponInventory() - numberOfThreads * reduceNum);
         }
+
     }
 }
