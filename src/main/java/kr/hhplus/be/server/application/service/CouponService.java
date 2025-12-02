@@ -1,12 +1,14 @@
 package kr.hhplus.be.server.application.service;
 
 import kr.hhplus.be.server.common.redis.DistributedLock;
+import kr.hhplus.be.server.common.utils.CacheNames;
 import kr.hhplus.be.server.datasource.CouponRepositoryImpl;
 import kr.hhplus.be.server.datasource.UserCouponRepositoryImpl;
 import kr.hhplus.be.server.domain.Coupon;
 import kr.hhplus.be.server.domain.User;
 import kr.hhplus.be.server.domain.UserCoupon;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,6 +80,8 @@ public class CouponService {
      * @param couponType
      * @return
      */
+    @Cacheable(value = CacheNames.COUPON_TYPE, key = "#couponType")
+    @Transactional(readOnly = true)
     public Coupon getCouponInfo(String couponType) {
         return couponRepository.findByCouponType(couponType).orElseThrow(() -> new NoSuchElementException(couponType + ": 해당하는 쿠폰이 없습니다."));
     }
