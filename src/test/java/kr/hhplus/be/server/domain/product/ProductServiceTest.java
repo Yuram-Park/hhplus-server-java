@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.service;
+package kr.hhplus.be.server.domain.product;
 
 import kr.hhplus.be.server.application.service.ProductService;
 import kr.hhplus.be.server.datasource.ProductRepositoryImpl;

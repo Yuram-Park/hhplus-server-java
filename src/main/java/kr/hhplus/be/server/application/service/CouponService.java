@@ -80,7 +80,7 @@ public class CouponService {
      * @param couponType
      * @return
      */
-    @Cacheable(value = CacheNames.COUPON_TYPE, key = "#couponType")
+//    @Cacheable(value = CacheNames.COUPON_TYPE, key = "#couponType")
     @Transactional(readOnly = true)
     public Coupon getCouponInfo(String couponType) {
         return couponRepository.findByCouponType(couponType).orElseThrow(() -> new NoSuchElementException(couponType + ": 해당하는 쿠폰이 없습니다."));
