@@ -2,6 +2,7 @@ package kr.hhplus.be.server.application.jpa;
 
 import jakarta.persistence.LockModeType;
 import kr.hhplus.be.server.domain.Product;
+import kr.hhplus.be.server.dto.PopularProductDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +29,11 @@ public interface ProductJpaRepository extends JpaRepository<Product, String> {
     Optional<Product> findById(String product_id);
 
     Product save(Product product);
+
+    // Product ranking 조회용
+    @Query(nativeQuery = true,
+    value = "select p.product_id as productId, p.product_name as productName, SUM(o.order_item_quantity) as totalCount from order_item o join product p on o.product_id = p.product_id " +
+            "where o.created_at >= :startDate group by o.product_id " +
+            "order by totalCount DESC LIMIT 5")
+    List<PopularProductDto> findPopularProduct(@Param("startDate")LocalDate startDate);
 }

@@ -58,4 +58,12 @@ public class UserCoupon {
         this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
 
+    /**
+     * 쿠폰 사용을 취소한다.
+     */
+    public void cancleUseThisCoupon() {
+        this.isUsed = false;
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
+    }
+
 }

@@ -60,4 +60,14 @@ public class UserCouponService {
         return userCouponRepository.updateUserCoupon(userCoupon);
     }
 
+    /**
+     * 사용자 쿠폰 사용 취소
+     * @param couponId
+     * @return
+     */
+    public UserCoupon cancleUserCouponUse(int couponId) {
+        UserCoupon userCoupon = userCouponRepository.getUserCouponInfo(couponId).orElseThrow(() -> new NoSuchElementException(couponId + ": 해당하는 쿠폰이 없습니다."));
+        userCoupon.cancleUseThisCoupon();
+        return userCouponRepository.updateUserCoupon(userCoupon);
+    }
 }

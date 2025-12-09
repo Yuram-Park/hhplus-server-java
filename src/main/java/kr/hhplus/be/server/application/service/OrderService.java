@@ -5,6 +5,7 @@ import kr.hhplus.be.server.domain.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -20,6 +21,8 @@ public class OrderService {
      * @return
      */
     public Order createOrder(Order order) {
+        order.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        order.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         return orderRepository.createOrder(order);
     }
 

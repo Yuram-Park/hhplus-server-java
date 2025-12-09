@@ -33,8 +33,8 @@ public class OrderController {
      */
     @Operation(summary = "상품 주문 요청")
     @PostMapping("/requestOrder")
-    public ResponseEntity<Map<ProductRequestDto, Product>> requestOrder(@RequestBody List<ProductRequestDto> productList) {
-        return ResponseEntity.ok(orderFacade.requestOrder(productList));
+    public ResponseEntity<Order> requestOrder(@RequestBody List<ProductRequestDto> productList, String userId) {
+        return ResponseEntity.ok(orderFacade.requestOrder(productList, userId));
     }
 
     /**

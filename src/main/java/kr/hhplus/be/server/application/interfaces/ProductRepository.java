@@ -2,9 +2,12 @@ package kr.hhplus.be.server.application.interfaces;
 
 import kr.hhplus.be.server.domain.Product;
 
+import kr.hhplus.be.server.dto.PopularProductDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository {
@@ -15,4 +18,7 @@ public interface ProductRepository {
     Page<Product> findByPagePerPage(Pageable pageable);
     Optional<Product> findByProductId(String productId);
     Product updateByProductId(Product product);
+
+    // Product Ranking 조회 메서드
+    List<PopularProductDto> findPopularProduct(LocalDate startDate);
 }

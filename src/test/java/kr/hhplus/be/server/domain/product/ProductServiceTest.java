@@ -3,6 +3,7 @@ package kr.hhplus.be.server.domain.product;
 import kr.hhplus.be.server.application.service.ProductService;
 import kr.hhplus.be.server.datasource.ProductRepositoryImpl;
 import kr.hhplus.be.server.domain.Product;
+import kr.hhplus.be.server.dto.PopularProductDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -103,6 +105,25 @@ public class ProductServiceTest {
 
             // then
             assertThat(result.getProductInventory()).isEqualTo(product.getProductInventory());
+        }
+
+        @Test
+        @DisplayName("당일 인기상품을 조회할 수 있다.")
+        void 당일_인기상품_조회_성공() {
+            // given
+            PopularProductDto p1 = new PopularProductDto("T01", "티셔츠", 100L);
+            PopularProductDto p2 = new PopularProductDto("P01", "청바지츠", 150L);
+            PopularProductDto p3 = new PopularProductDto("S01", "스커트", 200L);
+
+            List<PopularProductDto> popularProductDtos = List.of(p1, p2, p3);
+
+            when(productRepository.findPopularProduct(any())).thenReturn(popularProductDtos);
+
+            // when
+            List<PopularProductDto> result = productService.findPopularProducts(LocalDate.now());
+
+            // then
+            assertThat(result).isEqualTo(popularProductDtos);
         }
     }
 

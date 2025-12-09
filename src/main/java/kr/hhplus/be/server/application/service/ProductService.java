@@ -2,6 +2,7 @@ package kr.hhplus.be.server.application.service;
 
 import kr.hhplus.be.server.datasource.ProductRepositoryImpl;
 import kr.hhplus.be.server.domain.Product;
+import kr.hhplus.be.server.dto.PopularProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -66,5 +68,14 @@ public class ProductService {
         Product product = productRepository.findByProductId(productId).orElseThrow(() -> new NoSuchElementException(productId + " : 해당 상품이 존재하지 않습니다."));
         product.increaseInventory(increaseCount);
         return productRepository.updateByProductId(product);
+    }
+
+    /**
+     * 인기 상품 조회
+     * @param startDate
+     * @return
+     */
+    public List<PopularProductDto> findPopularProducts(LocalDate startDate) {
+        return productRepository.findPopularProduct(startDate);
     }
 }

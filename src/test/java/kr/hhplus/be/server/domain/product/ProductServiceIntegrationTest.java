@@ -31,6 +31,23 @@ public class ProductServiceIntegrationTest extends IntegrationTestContext {
     void setUp() {
         Product product = new Product("T01", "티셔츠", "하얀색 티셔츠", 100, 100, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
         productRepository.updateByProductId(product);
+
+
+    }
+
+    @Nested
+    @DisplayName("상품 조회 시")
+    class GetProduct {
+
+        @Test
+        @DisplayName("당일 인기상품을 조회 할 수 있다.")
+        void 당일_인기상품_조회_성공() {
+            // given
+
+            // when
+
+            // then
+        }
     }
 
     @Nested

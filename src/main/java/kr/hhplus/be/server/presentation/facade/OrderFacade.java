@@ -1,17 +1,13 @@
 package kr.hhplus.be.server.presentation.facade;
 
-import kr.hhplus.be.server.application.service.OrderService;
-import kr.hhplus.be.server.application.service.UserService;
-import kr.hhplus.be.server.application.service.ProductService;
-import kr.hhplus.be.server.domain.Order;
-import kr.hhplus.be.server.domain.Product;
-import kr.hhplus.be.server.domain.User;
+import kr.hhplus.be.server.application.service.*;
+import kr.hhplus.be.server.domain.*;
 import kr.hhplus.be.server.dto.ProductRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,30 +18,22 @@ public class OrderFacade {
     private final ProductService productService;
     private final UserService userService;
     private final OrderService orderService;
+    private final OrderItemService orderItemService;
+    private final UserCouponService userCouponService;
 
     /**
      * 상품 주문 요청
+     *
      * @param productList
      * @return
      */
-    public Map<ProductRequestDto, Product> requestOrder(List<ProductRequestDto> productList) {
+    public Order requestOrder(List<ProductRequestDto> productList, String userId) {
 
-        Map<ProductRequestDto, Product> results = new HashMap<>();
+        // 가격 총합 계산
+        int totalPayment = productList.stream().mapToInt(ProductRequestDto::getProductPayment).sum();
+        // orderId=null 인 Order 객체 생성
+        return new Order(null, userId, totalPayment, null, 0, totalPayment, null, null);
 
-        for (ProductRequestDto productDto : productList) {
-            // 상품 재고 조회 요청
-            Product product = productService.getProductDetail(productDto.getProductId());
-
-            if (productDto.getRequestQuantity() <= product.getProductInventory()) {
-                productDto.setOrderAvailability(true);
-            } else {
-                productDto.setOrderAvailability(false);
-            }
-
-            results.put(productDto, product);
-        }
-        // TODO OrderItem 리스트와 orderId=null인 Order 를 return해주기
-        return results;
     }
 
     /**
@@ -55,48 +43,56 @@ public class OrderFacade {
      * @return
      */
 //    @Transactional
-    public Order requestPayment(String userId, Map<ProductRequestDto, Product> productList) {
+    public Order requestPayment(List<ProductRequestDto> productList, Order order, String userId) {
 
-        int totalPrice = 0;
-        // 총 결제 금액 계산
-        for(ProductRequestDto dto : productList.keySet()) {
-            Product product = productList.get(dto);
-            totalPrice += product.getProductPrice();
-        }
+        // 쿠폰 사용 정보, 주소가 입력된 Order 객체 및 상품주문 리스트를 받아 진행
 
         // 잔액 확인 요청
         User user = userService.getUserPoint(userId);
 
         // 주문금액 <= 잔액 : 주문 가능
+        int totalPrice = order.getFinalPaymentAmount();
         if(totalPrice <= user.getUserPoint()) {
 
+//            List<Product> orderProductList = new ArrayList<>();
+
             // 상품 재고 차감 요청
-            for(ProductRequestDto dto : productList.keySet()) {
-                Product product = productList.get(dto);
+            for(ProductRequestDto dto : productList) {
+                // 상품 정보 조회
+                Product product = productService.getProductDetail(dto.getProductId());
+//                orderProductList.add(product);
                 productService.reduceProduct(product.getProductId(), dto.getRequestQuantity());
             }
 
-            // TODO 쿠폰 적용 요청
-            Integer couponId = null;
-            int discountPaymentAmount = 0;
-
-            int finalPaymentAmount = totalPrice - discountPaymentAmount;
+            // 쿠폰 사용
+            userCouponService.useUserCoupon(order.getCouponId(), order.getOriginalPaymentAmount());
 
             // 포인트 사용(결제) 요청
             try {
                 userService.usePoint(user.getUserId(), totalPrice);
             } catch (Exception e) {
                 // 결제 실패 시 상품 재고 복구
-                for(ProductRequestDto dto : productList.keySet()) {
-                    Product product = productList.get(dto);
+                for(ProductRequestDto dto : productList) {
+                    Product product = productService.getProductDetail(dto.getProductId());
                     productService.increaseProduct(product.getProductId(), dto.getRequestQuantity());
                 }
+                // 쿠폰 사용여부 복구
+                userCouponService.cancleUserCouponUse(order.getOrderId());
             }
 
             // 주문내역 생성 요청
-            Order order = new Order(null, user.getUserId(), totalPrice, couponId, discountPaymentAmount, finalPaymentAmount, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
             Order result = orderService.createOrder(order);
+
+            // orderId로 orderItems 생성
+            List<OrderItem> orderItemList = new ArrayList<>();
+            for(ProductRequestDto dto : productList) {
+                OrderItem orderItem = new OrderItem(null, result.getOrderId(), dto.getProductId(), dto.getRequestQuantity(), dto.getProductPayment(),new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+                orderItemList.add(orderItem);
+            }
+            orderItemService.saveAllOrderItems(orderItemList);
+
             return result;
+            
         } else {
             // 주문금액 > 잔액 : 주문 불가능
             throw new IllegalArgumentException("잔액이 부족합니다.");
