@@ -2,7 +2,6 @@ package kr.hhplus.be.server.application.jpa;
 
 import jakarta.persistence.LockModeType;
 import kr.hhplus.be.server.domain.Product;
-import kr.hhplus.be.server.dto.PopularProductDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -32,8 +31,8 @@ public interface ProductJpaRepository extends JpaRepository<Product, String> {
 
     // Product ranking 조회용
     @Query(nativeQuery = true,
-    value = "select p.product_id as productId, p.product_name as productName, SUM(o.order_item_quantity) as totalCount from order_item o join product p on o.product_id = p.product_id " +
+    value = "select p.* from order_item o join product p on o.product_id = p.product_id " +
             "where o.created_at >= :startDate group by o.product_id " +
-            "order by totalCount DESC LIMIT 5")
-    List<PopularProductDto> findPopularProduct(@Param("startDate")LocalDate startDate);
+            "order by sum(o.order_item_quantity) DESC LIMIT 5")
+    List<Product> findPopularProduct(@Param("startDate")LocalDate startDate);
 }

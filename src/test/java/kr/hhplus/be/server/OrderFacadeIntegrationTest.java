@@ -3,6 +3,7 @@ package kr.hhplus.be.server;
 import kr.hhplus.be.server.datasource.ProductRepositoryImpl;
 import kr.hhplus.be.server.domain.Order;
 import kr.hhplus.be.server.domain.Product;
+import kr.hhplus.be.server.domain.User;
 import kr.hhplus.be.server.dto.ProductRequestDto;
 import kr.hhplus.be.server.presentation.facade.OrderFacade;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.shaded.org.checkerframework.checker.units.qual.A;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -36,6 +38,8 @@ public class OrderFacadeIntegrationTest extends IntegrationTestContext{
     void setUp() {
         Product product = new Product("T01", "티셔츠", "하얀색 티셔츠", 1, 10_000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
         productRepository.updateByProductId(product);
+        User user = new User("user1", "1111", null, null, 20000, null, null, null);
+
     }
 
     @Test
@@ -44,7 +48,14 @@ public class OrderFacadeIntegrationTest extends IntegrationTestContext{
     void 상품_재고_동시성_테스트() throws InterruptedException {
         // given
         int orderQuantity = 1;
+        ProductRequestDto dto = new ProductRequestDto();
+        dto.setProductId("T01");
+        dto.setRequestQuantity(orderQuantity);
 
+        List<ProductRequestDto> productList = new ArrayList<>();
+        productList.add(dto);
+
+        Order order = new Order(null, "user1", 10000, null, 0, 10000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
         ExecutorService executor = Executors.newFixedThreadPool(2);
         CountDownLatch latch = new CountDownLatch(2);
 
@@ -54,14 +65,7 @@ public class OrderFacadeIntegrationTest extends IntegrationTestContext{
         for(int i = 0; i < 2; i++) {
             executor.submit(() -> {
                 try {
-                    Map<ProductRequestDto, Product> requestMap = new HashMap<>();
-                    ProductRequestDto dto = new ProductRequestDto();
-                    dto.setProductId("T01");
-                    dto.setRequestQuantity(orderQuantity);
-                    Product product = productRepository.findByProductId("T01").orElseThrow();
-                    requestMap.put(dto, product);
-
-                    finalOrderList.add(orderFacade.requestPayment("ID01", requestMap));
+                    finalOrderList.add(orderFacade.requestPayment(productList, order, "user1"));
                 } catch (Exception e) {
                     System.out.println("주문 실패: " + e.getMessage());
                     e.printStackTrace();

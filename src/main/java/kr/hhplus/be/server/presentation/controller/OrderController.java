@@ -44,7 +44,7 @@ public class OrderController {
      */
     @Operation(summary = "상품 결제 요청")
     @PostMapping("/pay")
-    public ResponseEntity<Order>  createOrder(@RequestParam String userId, @RequestBody Map<ProductRequestDto, Product> productList) {
-        return ResponseEntity.ok(orderFacade.requestPayment(userId, productList));
+    public ResponseEntity<Order>  createOrder(@RequestParam String userId, @RequestBody List<ProductRequestDto> productList, Order order) {
+        return ResponseEntity.ok(orderFacade.requestPayment(productList, order, userId));
     }
 }

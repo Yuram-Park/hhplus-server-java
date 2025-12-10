@@ -3,7 +3,6 @@ package kr.hhplus.be.server.datasource;
 import kr.hhplus.be.server.application.interfaces.ProductRepository;
 import kr.hhplus.be.server.application.jpa.ProductJpaRepository;
 import kr.hhplus.be.server.domain.Product;
-import kr.hhplus.be.server.dto.PopularProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
@@ -42,7 +41,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<PopularProductDto> findPopularProduct(LocalDate startDate) {
+    public List<Product> findPopularProduct(LocalDate startDate) {
         return productJpaRepository.findPopularProduct(startDate);
     }
 }
