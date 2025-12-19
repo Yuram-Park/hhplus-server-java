@@ -69,11 +69,15 @@ public class ProductService {
     }
 
     /**
-     * 인기 상품 조회
+     * 인기 상품 조회(기존 로직)
      * @param startDate
      * @return
      */
     public List<Product> findPopularProducts(LocalDate startDate) {
         return productRepository.findPopularProduct(startDate);
+    }
+
+    public List<Product> findPopularProductsRedis(LocalDate startDate) {
+        return null;
     }
 }

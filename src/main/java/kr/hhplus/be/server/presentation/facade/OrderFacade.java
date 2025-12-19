@@ -83,13 +83,15 @@ public class OrderFacade {
             // 주문내역 생성 요청
             Order result = orderService.createOrder(order);
 
+            int orderId = result.getOrderId();
+
             // orderId로 orderItems 생성
             List<OrderItem> orderItemList = new ArrayList<>();
             for(ProductRequestDto dto : productList) {
-                OrderItem orderItem = new OrderItem(null, result.getOrderId(), dto.getProductId(), dto.getRequestQuantity(), dto.getProductPayment(),new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+                OrderItem orderItem = new OrderItem(null, orderId, dto.getProductId(), dto.getRequestQuantity(), dto.getProductPayment(),new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
                 orderItemList.add(orderItem);
             }
-            orderItemService.saveAllOrderItems(orderItemList);
+            orderItemService.saveAllOrderItems(orderId, orderItemList);
 
             return result;
 
