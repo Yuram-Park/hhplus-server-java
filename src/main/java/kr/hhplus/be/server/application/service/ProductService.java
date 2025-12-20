@@ -7,6 +7,7 @@ import kr.hhplus.be.server.datasource.ProductRepositoryImpl;
 import kr.hhplus.be.server.domain.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -95,6 +96,23 @@ public class ProductService {
         Map<String, Integer> topProductIds = dailySalesProductRepository.findYesterdayRankingProduct();
 
         // productId 순서로 Product 정보 검색
+        List<String> productIds = new ArrayList<>(topProductIds.keySet());
+        List<Product> rankingProductResult = productRepository.findAllByIds(productIds);
+
+        // TODO 판매량 추가하여 return하기
+
+        return rankingProductResult;
+    }
+
+    /**
+     * 전일 인기 상품 조회(캐시 적용)
+     * @return
+     */
+    @Cacheable(value = CacheNames.PRODUCT_SALES, key = "'DAILY_PRODUCT_SALES:' + T(java.time.LocalDate).now().toString()")
+    @Transactional(readOnly = true)
+    public List<Product> loadDailyTopProducts() {
+        Map<String, Integer> topProductIds = dailySalesProductRepository.findYesterdayRankingProduct();
+
         List<String> productIds = new ArrayList<>(topProductIds.keySet());
         List<Product> rankingProductResult = productRepository.findAllByIds(productIds);
 
