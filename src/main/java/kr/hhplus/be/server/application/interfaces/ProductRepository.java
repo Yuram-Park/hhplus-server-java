@@ -20,4 +20,6 @@ public interface ProductRepository {
 
     // Product Ranking 조회 메서드
     List<Product> findPopularProduct(LocalDate startDate);
+
+    List<Product> findAllByIds(List<String> productIds);
 }

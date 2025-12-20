@@ -52,6 +52,10 @@ dependencies {
 	// Redis
     implementation("org.redisson:redisson-spring-boot-starter:3.45.1")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    // shedlock
+    implementation("net.javacrumbs.shedlock:shedlock-spring:6.3.0")
+    implementation("net.javacrumbs.shedlock:shedlock-provider-redis-spring:6.3.0")
 }
 
 tasks.withType<Test> {

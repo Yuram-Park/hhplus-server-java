@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.application.event;
 
-import kr.hhplus.be.server.application.interfaces.SalesProductRepository;
+import kr.hhplus.be.server.application.interfaces.DailySalesProductRepository;
 import kr.hhplus.be.server.dto.OrderItemEventDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderEventListener {
 
-    private final SalesProductRepository salesProductRepository;
+    private final DailySalesProductRepository dailySalesProductRepository;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -25,7 +25,7 @@ public class OrderEventListener {
                         orderItemEventDto -> String.valueOf(orderItemEventDto.getProductId()),
                         Collectors.summingInt(OrderItemEventDto::getOrderItemQuantity)
                 ));
-        salesProductRepository.addSalesQuantity(salesData);
+        dailySalesProductRepository.addSalesQuantity(salesData);
     }
 
 }

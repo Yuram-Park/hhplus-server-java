@@ -1,8 +1,12 @@
 package kr.hhplus.be.server.application.service;
 
+import kr.hhplus.be.server.application.interfaces.DailySalesProductRepository;
+import kr.hhplus.be.server.application.interfaces.ProductRepository;
+import kr.hhplus.be.server.common.utils.CacheNames;
 import kr.hhplus.be.server.datasource.ProductRepositoryImpl;
 import kr.hhplus.be.server.domain.Product;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -11,14 +15,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductRepositoryImpl productRepository;
+    private final ProductRepository productRepository;
+    private final DailySalesProductRepository dailySalesProductRepository;
 
     /**
      * 상품 리스트 조회
@@ -77,7 +84,22 @@ public class ProductService {
         return productRepository.findPopularProduct(startDate);
     }
 
-    public List<Product> findPopularProductsRedis(LocalDate startDate) {
-        return null;
+    /**
+     * 전일 인기 상품 조회를 위한 Redis 업데이트
+     * @return
+     */
+    @CachePut(value = CacheNames.PRODUCT_SALES, key = "'DAILY_PRODUCT_SALES:' + T(java.time.LocalDate).now().toString()")
+    @Transactional(readOnly = true)
+    public List<Product> refreshDailyTopProducts() {
+        // Redis에서 어제날짜 key로 product-score 조회
+        Map<String, Integer> topProductIds = dailySalesProductRepository.findYesterdayRankingProduct();
+
+        // productId 순서로 Product 정보 검색
+        List<String> productIds = new ArrayList<>(topProductIds.keySet());
+        List<Product> rankingProductResult = productRepository.findAllByIds(productIds);
+
+        // TODO 판매량 추가하여 return하기
+
+        return rankingProductResult;
     }
 }

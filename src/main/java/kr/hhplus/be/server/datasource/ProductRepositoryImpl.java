@@ -44,4 +44,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     public List<Product> findPopularProduct(LocalDate startDate) {
         return productJpaRepository.findPopularProduct(startDate);
     }
+
+    @Override
+    public List<Product> findAllByIds(List<String> productIds) {
+        return productJpaRepository.findAllById(productIds);
+    }
+
 }

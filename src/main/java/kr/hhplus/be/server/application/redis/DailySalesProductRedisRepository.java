@@ -3,16 +3,20 @@ package kr.hhplus.be.server.application.redis;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
-public class SalesProductRedisRepository {
+public class DailySalesProductRedisRepository {
 
     private static final String KEY_PREFIX = "PRODUCT_SALES:DAILY:";
 
@@ -42,5 +46,33 @@ public class SalesProductRedisRepository {
         });
     }
 
+    /**
+     * Redis에 저장된 전날의 TOP 3 랭킹 상품 리스트 조회
+     * @return productId-score map
+     */
+    public Map<String, Integer> getYesterdayRankingProductIds() {
+
+        // Key build (yesterday)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String key = KEY_PREFIX + formatter.format(LocalDate.now().minusDays(1));
+
+        Set<ZSetOperations.TypedTuple<String>> rawResult = redisTemplate.opsForZSet().reverseRangeWithScores(key, 0, 2); // TOP 3개 가져오기
+        if(rawResult == null || rawResult.isEmpty()) {
+            return Map.of();
+        }
+
+        Map<String, Integer> result = new LinkedHashMap<>();
+
+        for(ZSetOperations.TypedTuple<String> item : rawResult) {
+            if(item.getValue() == null || item.getScore() == null) continue;
+
+            String productId = item.getValue();
+            int score = (int) Math.round(item.getScore());
+
+            result.put(productId, score);
+        }
+
+        return result;
+    }
 
 }
