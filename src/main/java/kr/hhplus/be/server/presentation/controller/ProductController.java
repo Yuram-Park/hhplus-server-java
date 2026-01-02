@@ -50,11 +50,9 @@ public class ProductController {
     @Operation(summary = "인기상품 목록 조회")
     @GetMapping("/popular")
     public ResponseEntity<List<Product>> getPopularProductList() {
-        // TODO 현재 날짜를 받아 지정 기간동안의 상품목록 조회 로직 구현
-        List<Product> productList = new ArrayList<>();
-        productList.add(new Product("T01", "White T-shirts", "하얀색 티셔츠", 3, 20000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
-        productList.add(new Product("T02", "Long Jacket", "롱 자켓", 5, 35000, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis())));
-        return ResponseEntity.ok(productList);
+        List<Product> result = productService.loadDailyTopProducts();
+
+        return ResponseEntity.ok(result);
     }
 
 }
