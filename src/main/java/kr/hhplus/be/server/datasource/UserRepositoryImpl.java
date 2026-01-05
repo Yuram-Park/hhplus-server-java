@@ -20,7 +20,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findPointById(String userId) {
+    public Optional<User> findUserById(String userId) {
         return userJpaRepository.findById(userId);
     }
 

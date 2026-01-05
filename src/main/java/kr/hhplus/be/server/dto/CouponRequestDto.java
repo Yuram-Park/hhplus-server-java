@@ -7,6 +7,14 @@ public class CouponRequestDto {
     private String couponType;
     private long requestTime;
 
+    public CouponRequestDto() {}
+
+    public CouponRequestDto(String userId, String couponType, long requestTime) {
+        this.userId = userId;
+        this.couponType = couponType;
+        this.requestTime = requestTime;
+    }
+
     public String getUserId() {
         return userId;
     }

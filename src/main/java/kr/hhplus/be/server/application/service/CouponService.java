@@ -131,6 +131,9 @@ public class CouponService {
         return userCouponRepository.getUserCouponList(userId);
     }
 
-
+    public List<CouponRequestDto> releaseListFromQueue(int size) {
+        // Redis에서 score가 가장 낮은 size개의 리스트를 반환하고 redis에서 제거
+        return couponIssuedRepository.findWaitingList(size);
+    }
 
 }

@@ -23,7 +23,7 @@ public class PointController {
     @Operation(summary = "포인트 잔액 조회")
     @GetMapping("/userPoint")
     public ResponseEntity<User> getUserPoint(@RequestParam String userId) {
-        User user = userService.getUserPoint(userId);
+        User user = userService.getUser(userId).orElseThrow();
         return ResponseEntity.ok(user);
     }
 

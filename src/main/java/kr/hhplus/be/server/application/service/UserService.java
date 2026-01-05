@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class UserService {
      * @return
      */
     public User registerUser(User user) {
-        return userRepository.findPointById(user.getUserId()).orElseGet(() -> userRepository.updateUserById(user));
+        return userRepository.findUserById(user.getUserId()).orElseGet(() -> userRepository.updateUserById(user));
     }
 
     /**
@@ -27,8 +28,8 @@ public class UserService {
      * @param userId
      * @return
      */
-    public User getUserPoint(String userId) {
-        return userRepository.findPointById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
+    public Optional<User> getUser(String userId) {
+        return Optional.ofNullable(userRepository.findUserById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다.")));
     }
 
     /**
@@ -38,7 +39,7 @@ public class UserService {
      * @return
      */
     public User chargePoint(String userId, int amount) {
-        User user = userRepository.findPointById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
+        User user = userRepository.findUserById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
         user.chargePoint(amount);
         return userRepository.updatePointById(user);
     }
@@ -50,7 +51,7 @@ public class UserService {
      * @return
      */
     public User usePoint(String userId, int amount) {
-        User user = userRepository.findPointById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
+        User user = userRepository.findUserById(userId).orElseThrow(() -> new NoSuchElementException(userId + " : 해당하는 아이디가 존재하지 않습니다."));
         user.usePoint(amount);
         return userRepository.updatePointById(user);
     }

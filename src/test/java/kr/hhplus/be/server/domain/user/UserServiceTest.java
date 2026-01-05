@@ -43,10 +43,10 @@ public class UserServiceTest {
             int remainingPoints = 1000;
 
             User user = new User(userId, userPassword, null, null, remainingPoints, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findUserById(anyString())).thenReturn(Optional.of(user));
 
             // when
-            User userResult = userService.getUserPoint(user.getUserId());
+            User userResult = userService.getUser(user.getUserId()).orElseThrow();
 
             // then
             assertThat(userResult.getUserPoint()).isEqualTo(user.getUserPoint());
@@ -68,7 +68,7 @@ public class UserServiceTest {
             int chargePoint = 1000;
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findUserById(anyString())).thenReturn(Optional.of(user));
             when(userRepository.updatePointById(any())).thenReturn(new User(userId, userPassword, null, null, startPoint + chargePoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0));
 
             // when
@@ -88,7 +88,7 @@ public class UserServiceTest {
             int chargePoint = 0;
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findUserById(anyString())).thenReturn(Optional.of(user));
 
             // when, then
             assertThrows(IllegalArgumentException.class, () -> userService.chargePoint(user.getUserId(), chargePoint));
@@ -104,7 +104,7 @@ public class UserServiceTest {
             int chargePoint = 100_001;
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findUserById(anyString())).thenReturn(Optional.of(user));
 
             // when, then
             assertThrows(IllegalArgumentException.class, () -> userService.chargePoint(user.getUserId(), chargePoint));
@@ -126,7 +126,7 @@ public class UserServiceTest {
 
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findUserById(anyString())).thenReturn(Optional.of(user));
             when(userRepository.updatePointById(any())).thenReturn(new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0));
 
             // when
@@ -147,7 +147,7 @@ public class UserServiceTest {
 
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
 
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findUserById(anyString())).thenReturn(Optional.of(user));
             // when, then
             assertThrows(IllegalArgumentException.class, () -> userService.usePoint(user.getUserId(), usePoint));
         }
@@ -162,7 +162,7 @@ public class UserServiceTest {
             int usePoint = 1001;
 
             User user = new User(userId, userPassword, null, null, startPoint, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), 0);
-            when(userRepository.findPointById(anyString())).thenReturn(Optional.of(user));
+            when(userRepository.findUserById(anyString())).thenReturn(Optional.of(user));
 
             // when, then
             assertThrows(IllegalArgumentException.class, () -> userService.usePoint(user.getUserId(), usePoint));

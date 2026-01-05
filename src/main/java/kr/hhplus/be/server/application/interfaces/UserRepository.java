@@ -19,7 +19,7 @@ public interface UserRepository {
      * @param userId
      * @return
      */
-    public Optional<User> findPointById(String userId);
+    public Optional<User> findUserById(String userId);
 
     /**
      * 포인트를 변경한다.

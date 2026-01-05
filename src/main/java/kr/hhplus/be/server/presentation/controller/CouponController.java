@@ -8,6 +8,7 @@ import kr.hhplus.be.server.domain.User;
 import kr.hhplus.be.server.domain.UserCoupon;
 import kr.hhplus.be.server.dto.CouponRequestDto;
 import kr.hhplus.be.server.dto.CouponResponseDto;
+import kr.hhplus.be.server.presentation.facade.CouponFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class CouponController {
 
     private final CouponService couponService;
+    private final CouponFacade couponFacade;
 
     /**
      * 쿠폰 종류 정보 조회
@@ -55,13 +57,16 @@ public class CouponController {
 
     /**
      * 선착순 쿠폰 발급
-     * @param userList
+     * Redis 대기열에서 당첨자 뽑아서 쿠폰 발급
+     * @param
      * @return
      */
     @Operation(summary = "선착순 쿠폰 발급")
     @PostMapping("/issue")
-    public ResponseEntity<Map<String, UserCoupon>> issueCoupon(CouponRequestDto requestDto) {
-        return ResponseEntity.ok(couponService.issueFcfsCoupon(userList));
+    public ResponseEntity<?> issueCoupon() {
+        int selectedPeopleNumForCouponType = 10;
+        boolean result = couponFacade.issueCouponFromQueue(selectedPeopleNumForCouponType);
+        return ResponseEntity.ok(result);
     }
 
 }
