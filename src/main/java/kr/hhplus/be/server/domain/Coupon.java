@@ -26,6 +26,41 @@ public class Coupon {
     @Column(nullable = false)
     private int couponInventory;
 
+    @Column(nullable = false)
+    private int issuedCount;
+
+    public String getCouponType() {
+        return couponType;
+    }
+
+    public void setCouponType(String couponType) {
+        this.couponType = couponType;
+    }
+
+    public int getCouponDiscountPercent() {
+        return couponDiscountPercent;
+    }
+
+    public void setCouponDiscountPercent(int couponDiscountPercent) {
+        this.couponDiscountPercent = couponDiscountPercent;
+    }
+
+    public int getCouponInventory() {
+        return couponInventory;
+    }
+
+    public void setCouponInventory(int couponInventory) {
+        this.couponInventory = couponInventory;
+    }
+
+    public int getIssuedCount() {
+        return issuedCount;
+    }
+
+    public void setIssuedCount(int issuedCount) {
+        this.issuedCount = issuedCount;
+    }
+
     public void reduceCouponInventory(int reduceNum) {
         // 요청 차감 수는 0보다 커야 합니다.
         if(reduceNum <= 0) {
@@ -36,5 +71,6 @@ public class Coupon {
             throw new IllegalArgumentException("요청 차감 수는 쿠폰 재고 수보다 많아야 합니다.");
         }
         this.couponInventory -= reduceNum;
+        this.issuedCount += reduceNum;
     }
 }

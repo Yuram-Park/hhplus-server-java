@@ -6,6 +6,7 @@ import kr.hhplus.be.server.application.service.CouponService;
 import kr.hhplus.be.server.domain.Coupon;
 import kr.hhplus.be.server.domain.User;
 import kr.hhplus.be.server.domain.UserCoupon;
+import kr.hhplus.be.server.dto.CouponRequestDto;
 import kr.hhplus.be.server.dto.CouponResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,7 @@ public class CouponController {
      */
     @Operation(summary = "선착순 쿠폰 발급")
     @PostMapping("/issue")
-    public ResponseEntity<Map<String, UserCoupon>> issueCoupon(List<User> userList) {
+    public ResponseEntity<Map<String, UserCoupon>> issueCoupon(CouponRequestDto requestDto) {
         return ResponseEntity.ok(couponService.issueFcfsCoupon(userList));
     }
 

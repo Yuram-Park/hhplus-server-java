@@ -1,5 +1,8 @@
 package kr.hhplus.be.server.application.service;
 
+import kr.hhplus.be.server.application.interfaces.CouponIssuedRepository;
+import kr.hhplus.be.server.application.interfaces.CouponRepository;
+import kr.hhplus.be.server.application.interfaces.UserCouponRepository;
 import kr.hhplus.be.server.common.redis.DistributedLock;
 import kr.hhplus.be.server.common.utils.CacheNames;
 import kr.hhplus.be.server.datasource.CouponRepositoryImpl;
@@ -7,6 +10,7 @@ import kr.hhplus.be.server.datasource.UserCouponRepositoryImpl;
 import kr.hhplus.be.server.domain.Coupon;
 import kr.hhplus.be.server.domain.User;
 import kr.hhplus.be.server.domain.UserCoupon;
+import kr.hhplus.be.server.dto.CouponRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -19,9 +23,11 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CouponService {
 
-    private final CouponRepositoryImpl couponRepository;
+    private final CouponRepository couponRepository;
 
-    private final UserCouponRepositoryImpl userCouponRepository;
+    private final UserCouponRepository userCouponRepository;
+
+    private final CouponIssuedRepository couponIssuedRepository;
 
     /**
      * 쿠폰 종류 생성
@@ -46,6 +52,7 @@ public class CouponService {
     }
 
     /**
+     * Deprecated - Redis로 변경
      * 선착순 쿠폰 발행
      * @param userList
      * @return
@@ -73,6 +80,26 @@ public class CouponService {
             }
         }
         return issuedList;
+    }
+
+    /**
+     * 선착순 쿠폰 발급 요청
+     * Redis 대기열 사용
+     * @param requestDto
+     */
+    public void issueRequestCoupon(CouponRequestDto requestDto) {
+        // user 당 쿠폰 타입 중복 비허용 - Redis에 들어있는지 확인
+        if(couponIssuedRepository.isAlreadyIssued(requestDto)) {
+            throw new IllegalArgumentException("Already issued.");
+        }
+        // 쿠폰 수량 부족하면 발급 취소
+        Optional<Coupon> coupon = couponRepository.findByCouponType(requestDto.getCouponType());
+        if(coupon.isEmpty()) {
+            throw new IllegalArgumentException("해당하는 쿠폰 종류가 없습니다.");
+        } else if(coupon.get().getCouponInventory() <= coupon.get().getIssuedCount()) {
+            throw new IllegalArgumentException("쿠폰 수량이 모두 소진되었습니다.");
+        }
+        couponIssuedRepository.save(requestDto);
     }
 
     /**
