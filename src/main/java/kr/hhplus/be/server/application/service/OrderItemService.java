@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.application.service;
 
 import kr.hhplus.be.server.application.event.OrderEvent;
+import kr.hhplus.be.server.application.interfaces.OrderItemRepository;
 import kr.hhplus.be.server.datasource.OrderItemRepositoryImpl;
 import kr.hhplus.be.server.domain.OrderItem;
 import kr.hhplus.be.server.dto.OrderItemEventDto;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderItemService {
 
-    private final OrderItemRepositoryImpl orderItemRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public List<OrderItem> saveAllOrderItems(int orderId, List<OrderItem> orderItems) {
@@ -24,6 +25,15 @@ public class OrderItemService {
         applicationEventPublisher.publishEvent(new OrderEvent(orderId, result.stream().map(OrderItemEventDto::from).toList()));
 
         return result;
+    }
+
+    /**
+     * orderId 에 해당하는 모든 OrderItems 삭제
+     * @param orderId
+     */
+    public void deleteAllOrderItems(int orderId) {
+        List<OrderItem> items = orderItemRepository.findOrderItemsByOrderId(orderId);
+        orderItemRepository.deleteAllOrderItems(items);
     }
 
 }

@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface OrderItemRepository {
     List<OrderItem> saveAllOrderItems(List<OrderItem> orderItems);
+
+    List<OrderItem> findOrderItemsByOrderId(int orderId);
+
+    void deleteAllOrderItems(List<OrderItem> orderItems);
 }

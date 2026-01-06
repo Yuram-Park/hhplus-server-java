@@ -17,4 +17,14 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
     public List<OrderItem> saveAllOrderItems(List<OrderItem> orderItems) {
         return orderItemJapRepository.saveAll(orderItems);
     }
+
+    @Override
+    public List<OrderItem> findOrderItemsByOrderId(int orderId) {
+        return orderItemJapRepository.findOrderItemsByOrderId(orderId);
+    }
+
+    @Override
+    public void deleteAllOrderItems(List<OrderItem> orderItems) {
+        orderItemJapRepository.deleteAll(orderItems);
+    }
 }

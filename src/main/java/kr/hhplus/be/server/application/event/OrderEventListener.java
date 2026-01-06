@@ -4,6 +4,7 @@ import kr.hhplus.be.server.application.interfaces.DailySalesProductRepository;
 import kr.hhplus.be.server.dto.OrderItemEventDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class OrderEventListener {
 
     private final DailySalesProductRepository dailySalesProductRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * Daily Product 판매 수량 누적 이벤트
@@ -35,8 +37,13 @@ public class OrderEventListener {
                     ));
             dailySalesProductRepository.addSalesQuantity(salesData);
         } catch (Exception e) {
+            // 실패 시
+            // 1. 로그 기록
             log.error("ERROR in DailySalesProduct - orderId : {}", orderEvent.getOrderId());
             e.printStackTrace();
+
+            // 2. 보상 트랜잭션 이벤트 발행
+            applicationEventPublisher.publishEvent(new DailySalesUpdateFailedEvent(orderEvent.getOrderId(), orderEvent.getOrderItemEventDtos()));
         }
     }
 
