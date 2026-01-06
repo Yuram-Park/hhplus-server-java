@@ -48,7 +48,7 @@ public class OrderFacade {
         // 쿠폰 사용 정보, 주소가 입력된 Order 객체 및 상품주문 리스트를 받아 진행
 
         // 잔액 확인 요청
-        User user = userService.getUserPoint(userId);
+        User user = userService.getUser(userId).orElseThrow();
 
         // 주문금액 <= 잔액 : 주문 가능
         int totalPrice = order.getFinalPaymentAmount();
